@@ -88,6 +88,12 @@ public class AdvancedWebView extends WebView {
 					}
 				}
 			}
+			else {
+				if (mFileUploadCallback != null) {
+					mFileUploadCallback.onReceiveValue(null);
+					mFileUploadCallback = null;
+				}
+			}
 		}
 	}
 
