@@ -48,7 +48,10 @@ public class AdvancedWebView extends WebView {
 	protected WeakReference<Activity> mContext;
 	protected Listener mListener;
 	protected List<String> mPermittedHostnames;
-	protected ValueCallback<Uri> mFileUploadCallback;
+	/** File upload callback for platform versions prior to Android 5.0 */
+	protected ValueCallback<Uri> mFileUploadCallbackFirst;
+	/** File upload callback for Android 5.0+ */
+	protected ValueCallback<Uri[]> mFileUploadCallbackSecond;
 	protected long mLastError;
 	protected String mLanguageIso3;
 
@@ -78,20 +81,36 @@ public class AdvancedWebView extends WebView {
 		mListener = listener;
 	}
 
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
 		if (requestCode == RESULT_CODE_FILE_PICKER) {
 			if (resultCode == Activity.RESULT_OK) {
 				if (intent != null) {
-					if (mFileUploadCallback != null) {
-						mFileUploadCallback.onReceiveValue(intent.getData());
-						mFileUploadCallback = null;
+					if (mFileUploadCallbackFirst != null) {
+						mFileUploadCallbackFirst.onReceiveValue(intent.getData());
+						mFileUploadCallbackFirst = null;
+					}
+					else if (mFileUploadCallbackSecond != null) {
+						Uri[] dataUris;
+						try {
+							dataUris = new Uri[] { Uri.parse(intent.getDataString()) };
+						}
+						catch (Exception e) {
+							dataUris = null;
+						}
+
+						mFileUploadCallbackSecond.onReceiveValue(dataUris);
+						mFileUploadCallbackSecond = null;
 					}
 				}
 			}
 			else {
-				if (mFileUploadCallback != null) {
-					mFileUploadCallback.onReceiveValue(null);
-					mFileUploadCallback = null;
+				if (mFileUploadCallbackFirst != null) {
+					mFileUploadCallbackFirst.onReceiveValue(null);
+					mFileUploadCallbackFirst = null;
+				}
+				else if (mFileUploadCallbackSecond != null) {
+					mFileUploadCallbackSecond.onReceiveValue(null);
+					mFileUploadCallbackSecond = null;
 				}
 			}
 		}
@@ -221,17 +240,14 @@ public class AdvancedWebView extends WebView {
 
 			@SuppressWarnings("unused")
 			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-				final Activity activity = mContext.get();
-				if (activity == null) {
-					return;
-				}
+				openFileInput(uploadMsg, null);
+			}
 
-				mFileUploadCallback = uploadMsg;
-
-				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-				i.addCategory(Intent.CATEGORY_OPENABLE);
-				i.setType("*/*");
-				activity.startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), RESULT_CODE_FILE_PICKER);
+			// Android 5.0+
+			@SuppressWarnings("all")
+			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+				openFileInput(null, filePathCallback);
+				return true;
 			}
 
 		});
@@ -356,6 +372,28 @@ public class AdvancedWebView extends WebView {
 	protected static String decodeBase64(final String base64) throws IllegalArgumentException, UnsupportedEncodingException {
 		final byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
 		return new String(bytes, CHARSET_DEFAULT);
+	}
+
+	protected void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond) {
+		final Activity activity = mContext.get();
+		if (activity == null) {
+			return;
+		}
+
+		if (mFileUploadCallbackFirst != null) {
+			mFileUploadCallbackFirst.onReceiveValue(null);
+		}
+		mFileUploadCallbackFirst = fileUploadCallbackFirst;
+
+		if (mFileUploadCallbackSecond != null) {
+			mFileUploadCallbackSecond.onReceiveValue(null);
+		}
+		mFileUploadCallbackSecond = fileUploadCallbackSecond;
+
+		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+		i.addCategory(Intent.CATEGORY_OPENABLE);
+		i.setType("*/*");
+		activity.startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), RESULT_CODE_FILE_PICKER);
 	}
 
 }
