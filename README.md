@@ -12,7 +12,16 @@ Works on Android 2.2+ (API level 8 and above)
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
-### MyActivity.java
+### Layout (XML)
+
+```
+<im.delight.android.webview.AdvancedWebView
+	android:id="@+id/webview"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" />
+```
+
+### Activity (Java)
 
 ```
 public class MyActivity extends Activity implements AdvancedWebView.Listener {
