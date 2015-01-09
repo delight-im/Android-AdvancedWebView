@@ -63,6 +63,13 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 }
 ```
 
+### ProGuard (if enabled)
+
+```
+-keep class * extends android.webkit.WebChromeClient { *; }
+-dontwarn im.delight.android.webview.**
+```
+
 ## Features
 
  * Optimized for best performance and security
