@@ -4,6 +4,14 @@ Advanced WebView component for Android that works as intended out of the box
 
 Works on Android 2.2+ (API level 8 and above)
 
+## Installation
+
+ * Include one of the [JARs](JARs) in your `libs` folder
+ * or
+ * Copy the Java package to your project's source folder
+ * or
+ * Create a new library project from this repository and reference it in your project
+
 ## Usage
 
 ### AndroidManifest.xml
