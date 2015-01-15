@@ -41,7 +41,7 @@ public class AdvancedWebView extends WebView {
 		public void onExternalPageRequest(String url);
 	}
 
-	protected static final int RESULT_CODE_FILE_PICKER = 51426;
+	protected static final int REQUEST_CODE_FILE_PICKER = 51426;
 	protected static final String DATABASES_SUB_FOLDER = "/databases";
 	protected static final String LANGUAGE_DEFAULT_ISO3 = "eng";
 	protected static final String CHARSET_DEFAULT = "UTF-8";
@@ -54,6 +54,7 @@ public class AdvancedWebView extends WebView {
 	protected ValueCallback<Uri[]> mFileUploadCallbackSecond;
 	protected long mLastError;
 	protected String mLanguageIso3;
+	protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -71,6 +72,10 @@ public class AdvancedWebView extends WebView {
 	}
 
 	public void setListener(final Activity activity, final Listener listener) {
+		setListener(activity, listener, REQUEST_CODE_FILE_PICKER);
+	}
+
+	public void setListener(final Activity activity, final Listener listener, final int requestCodeFilePicker) {
 		if (activity != null) {
 			mContext = new WeakReference<Activity>(activity);
 		}
@@ -79,10 +84,12 @@ public class AdvancedWebView extends WebView {
 		}
 
 		mListener = listener;
+
+		mRequestCodeFilePicker = requestCodeFilePicker;
 	}
 
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
-		if (requestCode == RESULT_CODE_FILE_PICKER) {
+		if (requestCode == mRequestCodeFilePicker) {
 			if (resultCode == Activity.RESULT_OK) {
 				if (intent != null) {
 					if (mFileUploadCallbackFirst != null) {
@@ -393,7 +400,7 @@ public class AdvancedWebView extends WebView {
 		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 		i.addCategory(Intent.CATEGORY_OPENABLE);
 		i.setType("*/*");
-		activity.startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), RESULT_CODE_FILE_PICKER);
+		activity.startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
 	}
 
 }
