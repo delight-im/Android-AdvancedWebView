@@ -41,7 +41,7 @@ public class AdvancedWebView extends WebView {
 		public void onExternalPageRequest(String url);
 	}
 
-	protected static final int RESULT_CODE_FILE_PICKER = 184799617;
+	protected static final int RESULT_CODE_FILE_PICKER = 51426;
 	protected static final String DATABASES_SUB_FOLDER = "/databases";
 	protected static final String LANGUAGE_DEFAULT_ISO3 = "eng";
 	protected static final String CHARSET_DEFAULT = "UTF-8";
