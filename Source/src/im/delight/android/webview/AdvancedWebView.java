@@ -345,30 +345,30 @@ public class AdvancedWebView extends WebView {
 	/** Provides localizations for the 25 most widely spoken languages that have a ISO 639-2/T code */
 	protected String getFileUploadPromptLabel() {
 		try {
-			if (mLanguageIso3 == "zho") return decodeBase64("6YCJ5oup5LiA5Liq5paH5Lu2");
-			else if (mLanguageIso3 == "spa") return "Elija un archivo";
-			else if (mLanguageIso3 == "hin") return decodeBase64("4KSP4KSVIOCkq+CkvOCkvuCkh+CksiDgpJrgpYHgpKjgpYfgpII=");
-			else if (mLanguageIso3 == "ben") return decodeBase64("4KaP4KaV4Kaf4Ka/IOCmq+CmvuCmh+CmsiDgpqjgpr/gprDgp43gpqzgpr7gpprgpqg=");
-			else if (mLanguageIso3 == "ara") return decodeBase64("2KfYrtiq2YrYp9ixINmF2YTZgSDZiNin2K3Yrw==");
-			else if (mLanguageIso3 == "por") return "Escolha um arquivo";
-			else if (mLanguageIso3 == "rus") return decodeBase64("0JLRi9Cx0LXRgNC40YLQtSDQvtC00LjQvSDRhNCw0LnQuw==");
-			else if (mLanguageIso3 == "jpn") return decodeBase64("MeODleOCoeOCpOODq+OCkumBuOaKnuOBl+OBpuOBj+OBoOOBleOBhA==");
-			else if (mLanguageIso3 == "pan") return decodeBase64("4KiH4Kmx4KiVIOCoq+CovuCoh+CosiDgqJrgqYHgqKPgqYs=");
-			else if (mLanguageIso3 == "deu") return "Wähle eine Datei";
-			else if (mLanguageIso3 == "jav") return "Pilih siji berkas";
-			else if (mLanguageIso3 == "msa") return "Pilih satu fail";
-			else if (mLanguageIso3 == "tel") return decodeBase64("4LCS4LCVIOCwq+CxhuCxluCwsuCxjeCwqOCxgSDgsI7gsILgsJrgsYHgsJXgsYvgsILgsKHgsL8=");
-			else if (mLanguageIso3 == "vie") return decodeBase64("Q2jhu41uIG3hu5l0IHThuq1wIHRpbg==");
-			else if (mLanguageIso3 == "kor") return decodeBase64("7ZWY64KY7J2YIO2MjOydvOydhCDshKDtg50=");
-			else if (mLanguageIso3 == "fra") return "Choisissez un fichier";
-			else if (mLanguageIso3 == "mar") return decodeBase64("4KSr4KS+4KSH4KSyIOCkqOCkv+CkteCkoeCkvg==");
-			else if (mLanguageIso3 == "tam") return decodeBase64("4K6S4K6w4K+BIOCuleCvh+CuvuCuquCvjeCuquCviCDgrqTgr4fgrrDgr43grrXgr4E=");
-			else if (mLanguageIso3 == "urd") return decodeBase64("2KfbjNqpINmB2KfYptmEINmF24zauiDYs9uSINin2YbYqtiu2KfYqCDaqdix24zaug==");
-			else if (mLanguageIso3 == "fas") return decodeBase64("2LHYpyDYp9mG2KrYrtin2Kgg2qnZhtuM2K8g24zaqSDZgdin24zZhA==");
-			else if (mLanguageIso3 == "tur") return "Bir dosya seçin";
-			else if (mLanguageIso3 == "ita") return "Scegli un file";
-			else if (mLanguageIso3 == "tha") return decodeBase64("4LmA4Lil4Li34Lit4LiB4LmE4Lif4Lil4LmM4Lir4LiZ4Li24LmI4LiH");
-			else if (mLanguageIso3 == "guj") return decodeBase64("4KqP4KqVIOCqq+CqvuCqh+CqsuCqqOCrhyDgqqrgqrjgqoLgqqY=");
+			if (mLanguageIso3.equals("zho")) return decodeBase64("6YCJ5oup5LiA5Liq5paH5Lu2");
+			else if (mLanguageIso3.equals("spa")) return "Elija un archivo";
+			else if (mLanguageIso3.equals("hin")) return decodeBase64("4KSP4KSVIOCkq+CkvOCkvuCkh+CksiDgpJrgpYHgpKjgpYfgpII=");
+			else if (mLanguageIso3.equals("ben")) return decodeBase64("4KaP4KaV4Kaf4Ka/IOCmq+CmvuCmh+CmsiDgpqjgpr/gprDgp43gpqzgpr7gpprgpqg=");
+			else if (mLanguageIso3.equals("ara")) return decodeBase64("2KfYrtiq2YrYp9ixINmF2YTZgSDZiNin2K3Yrw==");
+			else if (mLanguageIso3.equals("por")) return "Escolha um arquivo";
+			else if (mLanguageIso3.equals("rus")) return decodeBase64("0JLRi9Cx0LXRgNC40YLQtSDQvtC00LjQvSDRhNCw0LnQuw==");
+			else if (mLanguageIso3.equals("jpn")) return decodeBase64("MeODleOCoeOCpOODq+OCkumBuOaKnuOBl+OBpuOBj+OBoOOBleOBhA==");
+			else if (mLanguageIso3.equals("pan")) return decodeBase64("4KiH4Kmx4KiVIOCoq+CovuCoh+CosiDgqJrgqYHgqKPgqYs=");
+			else if (mLanguageIso3.equals("deu")) return "Wähle eine Datei";
+			else if (mLanguageIso3.equals("jav")) return "Pilih siji berkas";
+			else if (mLanguageIso3.equals("msa")) return "Pilih satu fail";
+			else if (mLanguageIso3.equals("tel")) return decodeBase64("4LCS4LCVIOCwq+CxhuCxluCwsuCxjeCwqOCxgSDgsI7gsILgsJrgsYHgsJXgsYvgsILgsKHgsL8=");
+			else if (mLanguageIso3.equals("vie")) return decodeBase64("Q2jhu41uIG3hu5l0IHThuq1wIHRpbg==");
+			else if (mLanguageIso3.equals("kor")) return decodeBase64("7ZWY64KY7J2YIO2MjOydvOydhCDshKDtg50=");
+			else if (mLanguageIso3.equals("fra")) return "Choisissez un fichier";
+			else if (mLanguageIso3.equals("mar")) return decodeBase64("4KSr4KS+4KSH4KSyIOCkqOCkv+CkteCkoeCkvg==");
+			else if (mLanguageIso3.equals("tam")) return decodeBase64("4K6S4K6w4K+BIOCuleCvh+CuvuCuquCvjeCuquCviCDgrqTgr4fgrrDgr43grrXgr4E=");
+			else if (mLanguageIso3.equals("urd")) return decodeBase64("2KfbjNqpINmB2KfYptmEINmF24zauiDYs9uSINin2YbYqtiu2KfYqCDaqdix24zaug==");
+			else if (mLanguageIso3.equals("fas")) return decodeBase64("2LHYpyDYp9mG2KrYrtin2Kgg2qnZhtuM2K8g24zaqSDZgdin24zZhA==");
+			else if (mLanguageIso3.equals("tur")) return "Bir dosya seçin";
+			else if (mLanguageIso3.equals("ita")) return "Scegli un file";
+			else if (mLanguageIso3.equals("tha")) return decodeBase64("4LmA4Lil4Li34Lit4LiB4LmE4Lif4Lil4LmM4Lir4LiZ4Li24LmI4LiH");
+			else if (mLanguageIso3.equals("guj")) return decodeBase64("4KqP4KqVIOCqq+CqvuCqh+CqsuCqqOCrhyDgqqrgqrjgqoLgqqY=");
 		}
 		catch (Exception e) { }
 
