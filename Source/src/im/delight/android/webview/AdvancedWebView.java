@@ -1,5 +1,6 @@
 package im.delight.android.webview;
 
+import android.app.Fragment;
 import android.util.Base64;
 import android.os.Build;
 import android.webkit.DownloadListener;
@@ -45,7 +46,8 @@ public class AdvancedWebView extends WebView {
 	protected static final String DATABASES_SUB_FOLDER = "/databases";
 	protected static final String LANGUAGE_DEFAULT_ISO3 = "eng";
 	protected static final String CHARSET_DEFAULT = "UTF-8";
-	protected WeakReference<Activity> mContext;
+	protected WeakReference<Activity> mActivity;
+	protected WeakReference<Fragment> mFragment;
 	protected Listener mListener;
 	protected List<String> mPermittedHostnames;
 	/** File upload callback for platform versions prior to Android 5.0 */
@@ -77,14 +79,32 @@ public class AdvancedWebView extends WebView {
 
 	public void setListener(final Activity activity, final Listener listener, final int requestCodeFilePicker) {
 		if (activity != null) {
-			mContext = new WeakReference<Activity>(activity);
+			mActivity = new WeakReference<Activity>(activity);
 		}
 		else {
-			mContext = null;
+			mActivity = null;
 		}
 
-		mListener = listener;
+		setListener(listener, requestCodeFilePicker);
+	}
 
+	public void setListener(final Fragment fragment, final Listener listener) {
+		setListener(fragment, listener, REQUEST_CODE_FILE_PICKER);
+	}
+
+	public void setListener(final Fragment fragment, final Listener listener, final int requestCodeFilePicker) {
+		if (fragment != null) {
+			mFragment = new WeakReference<Fragment>(fragment);
+		}
+		else {
+			mFragment = null;
+		}
+
+		setListener(listener, requestCodeFilePicker);
+	}
+
+	protected void setListener(final Listener listener, final int requestCodeFilePicker) {
+		mListener = listener;
 		mRequestCodeFilePicker = requestCodeFilePicker;
 	}
 
@@ -157,7 +177,7 @@ public class AdvancedWebView extends WebView {
 	@SuppressWarnings("deprecation")
 	protected void init(Context context) {
 		if (context instanceof Activity) {
-			mContext = new WeakReference<Activity>((Activity) context);
+			mActivity = new WeakReference<Activity>((Activity) context);
 		}
 
 		mLanguageIso3 = getLanguageIso3();
@@ -381,12 +401,8 @@ public class AdvancedWebView extends WebView {
 		return new String(bytes, CHARSET_DEFAULT);
 	}
 
+	@SuppressLint("NewApi")
 	protected void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond) {
-		final Activity activity = mContext.get();
-		if (activity == null) {
-			return;
-		}
-
 		if (mFileUploadCallbackFirst != null) {
 			mFileUploadCallbackFirst.onReceiveValue(null);
 		}
@@ -400,7 +416,13 @@ public class AdvancedWebView extends WebView {
 		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 		i.addCategory(Intent.CATEGORY_OPENABLE);
 		i.setType("*/*");
-		activity.startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
+
+		if (mFragment != null && mFragment.get() != null && Build.VERSION.SDK_INT >= 11) {
+			mFragment.get().startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
+		}
+		else if (mActivity != null && mActivity.get() != null) {
+			mActivity.get().startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
+		}
 	}
 
 }

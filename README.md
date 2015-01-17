@@ -31,6 +31,8 @@ Works on Android 2.2+ (API level 8 and above)
 
 ### Activity (Java)
 
+#### Without Fragments
+
 ```
 public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
@@ -48,6 +50,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
 		mWebView.onActivityResult(requestCode, resultCode, intent);
 		// your normal onActivityResult(...) code here
 	}
@@ -59,6 +62,36 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 			super.onBackPressed();
 		}
 	}
+
+}
+```
+
+#### With Fragments
+
+```
+public class MyFragment extends Fragment implements AdvancedWebView.Listener {
+
+	private AdvancedWebView mWebView;
+
+	public MyFragment() { }
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_my, container, false);
+
+        mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
+        mWebView.setListener(this, this);
+        mWebView.loadUrl("http://www.example.org/");
+
+		return rootView;
+	}
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        mWebView.onActivityResult(requestCode, resultCode, intent);
+        // your normal onActivityResult(...) code here
+    }
 
 }
 ```
