@@ -63,6 +63,21 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 		}
 	}
 
+	@Override
+	public void onPageStarted(String url, Bitmap favicon) { }
+
+	@Override
+	public void onPageFinished(String url) { }
+
+	@Override
+	public void onPageError(int errorCode, String description, String failingUrl) { }
+
+	@Override
+	public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+
+	@Override
+	public void onExternalPageRequest(String url) { }
+
 }
 ```
 
@@ -93,6 +108,21 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
         // your normal onActivityResult(...) code here
     }
 
+	@Override
+	public void onPageStarted(String url, Bitmap favicon) { }
+
+	@Override
+	public void onPageFinished(String url) { }
+
+	@Override
+	public void onPageError(int errorCode, String description, String failingUrl) { }
+
+	@Override
+	public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+
+	@Override
+	public void onExternalPageRequest(String url) { }
+
 }
 ```
 
@@ -113,24 +143,20 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
  * Receive callbacks when pages start/finish loading or have errors
 
    ```
-   mWebView.setListener(this, new AdvancedWebView.Listener() {
+   @Override
+   public void onPageStarted(String url, Bitmap favicon) {
+       // a new page started loading
+   }
 
-       @Override
-       public void onPageStarted(String url, Bitmap favicon) {
-           // a new page started loading
-       }
+   @Override
+   public void onPageFinished(String url) {
+       // the new page finished loading
+   }
 
-       @Override
-       public void onPageFinished(String url) {
-           // the new page finished loading
-       }
-
-       @Override
-       public void onPageError(int errorCode, String description, String failingUrl) {
-           // the new page failed to load
-       }
-
-   });
+   @Override
+   public void onPageError(int errorCode, String description, String failingUrl) {
+       // the new page failed to load
+   }
    ```
 
  * Downloads are handled automatically and can be listened to
@@ -152,14 +178,15 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    ```
    mWebView.addPermittedHostname("www.example.org");
-   mWebView.setListener(this, new AdvancedWebView.Listener() {
-   
-       @Override
-       public void onExternalPageRequest(String url) {
-           // the user tried to open a page from a non-permitted hostname
-       }
-   	
-   });
+   ```
+
+   and
+
+   ```
+   @Override
+   public void onExternalPageRequest(String url) {
+       // the user tried to open a page from a non-permitted hostname
+   }
    ```
 
  * Prevent caching of HTML pages
