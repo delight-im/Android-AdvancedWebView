@@ -130,7 +130,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
            // the new page failed to load
        }
 
-   }
+   });
    ```
 
  * Downloads are handled automatically and can be listened to
