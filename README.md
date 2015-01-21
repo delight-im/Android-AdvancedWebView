@@ -142,6 +142,12 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    }
    ```
 
+ * Enable geolocation support (needs `<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />`)
+
+   ```
+   mWebView.setGeolocationEnabled(true);
+   ```
+
  * Define a custom set of permitted hostnames and receive callbacks for all other hostnames
 
    ```

@@ -67,6 +67,7 @@ public class AdvancedWebView extends WebView {
 	protected String mLanguageIso3;
 	protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
 	protected WebChromeClient mCustomWebChromeClient;
+	protected boolean mGeolocationEnabled;
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -121,6 +122,34 @@ public class AdvancedWebView extends WebView {
 	@Override
 	public void setWebChromeClient(WebChromeClient client) {
 		mCustomWebChromeClient = client;
+	}
+
+	@SuppressLint("SetJavaScriptEnabled")
+	public void setGeolocationEnabled(final boolean enabled) {
+		if (enabled) {
+			getSettings().setJavaScriptEnabled(true);
+			getSettings().setGeolocationEnabled(true);
+			setGeolocationDatabasePath();
+		}
+
+		mGeolocationEnabled = enabled;
+	}
+
+	@SuppressLint("NewApi")
+	protected void setGeolocationDatabasePath() {
+		final Activity activity;
+
+		if (mFragment != null && mFragment.get() != null && Build.VERSION.SDK_INT >= 11 && mFragment.get().getActivity() != null) {
+			activity = mFragment.get().getActivity();
+		}
+		else if (mActivity != null && mActivity.get() != null) {
+			activity = mActivity.get();
+		}
+		else {
+			return;
+		}
+
+		getSettings().setGeolocationDatabasePath(activity.getFilesDir().getPath());
 	}
 
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
@@ -440,7 +469,12 @@ public class AdvancedWebView extends WebView {
 					mCustomWebChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
 				}
 				else {
-					super.onGeolocationPermissionsShowPrompt(origin, callback);
+					if (mGeolocationEnabled) {
+						callback.invoke(origin, true, false);
+					}
+					else {
+						super.onGeolocationPermissionsShowPrompt(origin, callback);
+					}
 				}
 			}
 
