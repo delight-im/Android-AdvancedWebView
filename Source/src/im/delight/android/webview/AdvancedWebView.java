@@ -16,6 +16,14 @@ package im.delight.android.webview;
  * limitations under the License.
  */
 
+import android.net.http.SslError;
+import android.view.InputEvent;
+import android.view.KeyEvent;
+import android.webkit.ClientCertRequest;
+import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.os.Message;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -76,6 +84,7 @@ public class AdvancedWebView extends WebView {
 	protected long mLastError;
 	protected String mLanguageIso3;
 	protected int mRequestCodeFilePicker = REQUEST_CODE_FILE_PICKER;
+	protected WebViewClient mCustomWebViewClient;
 	protected WebChromeClient mCustomWebChromeClient;
 	protected boolean mGeolocationEnabled;
 
@@ -130,7 +139,12 @@ public class AdvancedWebView extends WebView {
 	}
 
 	@Override
-	public void setWebChromeClient(WebChromeClient client) {
+	public void setWebViewClient(final WebViewClient client) {
+		mCustomWebViewClient = client;
+	}
+
+	@Override
+	public void setWebChromeClient(final WebChromeClient client) {
 		mCustomWebChromeClient = client;
 	}
 
@@ -262,7 +276,7 @@ public class AdvancedWebView extends WebView {
 			webSettings.setDatabasePath(databaseDir);
 		}
 
-		setWebViewClient(new WebViewClient() {
+		super.setWebViewClient(new WebViewClient() {
 
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -270,6 +284,10 @@ public class AdvancedWebView extends WebView {
 					if (mListener != null) {
 						mListener.onPageStarted(url, favicon);
 					}
+				}
+
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onPageStarted(view, url, favicon);
 				}
 			}
 
@@ -280,6 +298,10 @@ public class AdvancedWebView extends WebView {
 						mListener.onPageFinished(url);
 					}
 				}
+
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onPageFinished(view, url);
+				}
 			}
 
 			@Override
@@ -289,12 +311,21 @@ public class AdvancedWebView extends WebView {
 				if (mListener != null) {
 					mListener.onPageError(errorCode, description, failingUrl);
 				}
+
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onReceivedError(view, errorCode, description, failingUrl);
+				}
 			}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if (isHostnameAllowed(url)) {
-					return false;
+					if (mCustomWebViewClient != null) {
+						return mCustomWebViewClient.shouldOverrideUrlLoading(view, url);
+					}
+					else {
+						return false;
+					}
 				}
 				else {
 					if (mListener != null) {
@@ -302,6 +333,136 @@ public class AdvancedWebView extends WebView {
 					}
 
 					return true;
+				}
+			}
+
+			@Override
+			public void onLoadResource(WebView view, String url) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onLoadResource(view, url);
+				}
+				else {
+					super.onLoadResource(view, url);
+				}
+			}
+
+			@SuppressWarnings("all")
+			public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+				if (mCustomWebViewClient != null) {
+					return mCustomWebViewClient.shouldInterceptRequest(view, url);
+				}
+				else {
+					return super.shouldInterceptRequest(view, url);
+				}
+			}
+
+			@SuppressWarnings("all")
+			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+				if (mCustomWebViewClient != null) {
+					return mCustomWebViewClient.shouldInterceptRequest(view, request);
+				}
+				else {
+					return super.shouldInterceptRequest(view, request);
+				}
+			}
+
+			@Override
+			public void onFormResubmission(WebView view, Message dontResend, Message resend) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onFormResubmission(view, dontResend, resend);
+				}
+				else {
+					super.onFormResubmission(view, dontResend, resend);
+				}
+			}
+
+			@Override
+			public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.doUpdateVisitedHistory(view, url, isReload);
+				}
+				else {
+					super.doUpdateVisitedHistory(view, url, isReload);
+				}
+			}
+
+			@Override
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onReceivedSslError(view, handler, error);
+				}
+				else {
+					super.onReceivedSslError(view, handler, error);
+				}
+			}
+
+			@SuppressWarnings("all")
+			public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onReceivedClientCertRequest(view, request);
+				}
+				else {
+					super.onReceivedClientCertRequest(view, request);
+				}
+			}
+
+			@Override
+			public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onReceivedHttpAuthRequest(view, handler, host, realm);
+				}
+				else {
+					super.onReceivedHttpAuthRequest(view, handler, host, realm);
+				}
+			}
+
+			@Override
+			public boolean shouldOverrideKeyEvent(WebView view, KeyEvent event) {
+				if (mCustomWebViewClient != null) {
+					return mCustomWebViewClient.shouldOverrideKeyEvent(view, event);
+				}
+				else {
+					return super.shouldOverrideKeyEvent(view, event);
+				}
+			}
+
+			@Override
+			public void onUnhandledKeyEvent(WebView view, KeyEvent event) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onUnhandledKeyEvent(view, event);
+				}
+				else {
+					super.onUnhandledKeyEvent(view, event);
+				}
+			}
+
+			@SuppressWarnings("all")
+			public void onUnhandledInputEvent(WebView view, InputEvent event) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onUnhandledInputEvent(view, event);
+				}
+				else {
+					super.onUnhandledInputEvent(view, event);
+				}
+			}
+
+			@Override
+			public void onScaleChanged(WebView view, float oldScale, float newScale) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onScaleChanged(view, oldScale, newScale);
+				}
+				else {
+					super.onScaleChanged(view, oldScale, newScale);
+				}
+			}
+
+			@SuppressWarnings("all")
+			public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
+				if (mCustomWebViewClient != null) {
+					mCustomWebViewClient.onReceivedLoginRequest(view, realm, account, args);
+				}
+				else {
+					super.onReceivedLoginRequest(view, realm, account, args);
 				}
 			}
 
@@ -475,12 +636,12 @@ public class AdvancedWebView extends WebView {
 
 			@Override
 			public void onGeolocationPermissionsShowPrompt(String origin, Callback callback) {
-				if (mCustomWebChromeClient != null) {
-					mCustomWebChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
+				if (mGeolocationEnabled) {
+					callback.invoke(origin, true, false);
 				}
 				else {
-					if (mGeolocationEnabled) {
-						callback.invoke(origin, true, false);
+					if (mCustomWebChromeClient != null) {
+						mCustomWebChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
 					}
 					else {
 						super.onGeolocationPermissionsShowPrompt(origin, callback);
