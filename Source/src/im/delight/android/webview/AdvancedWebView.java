@@ -1,5 +1,21 @@
 package im.delight.android.webview;
 
+/**
+ * Copyright 2015 delight.im <info@delight.im>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import android.os.Message;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -33,13 +49,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 
-/**
- * Advanced WebView component for Android that works as intended out of the box
- *
- * @author delight.im <info@delight.im>
- * @see <a href="https://github.com/delight-im/Android-AdvancedWebView">Android-AdvancedWebView on GitHub</a>
- * @see <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>
- */
+/** Advanced WebView component for Android that works as intended out of the box */
 @SuppressWarnings("deprecation")
 public class AdvancedWebView extends WebView {
 
