@@ -241,7 +241,15 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
-	@SuppressLint({ "SetJavaScriptEnabled", "NewApi" })
+	@SuppressLint("NewApi")
+	protected static void setAllowAccessFromFileUrls(final WebSettings webSettings, final boolean allowed) {
+		if (Build.VERSION.SDK_INT >= 16) {
+			webSettings.setAllowFileAccessFromFileURLs(allowed);
+			webSettings.setAllowUniversalAccessFromFileURLs(allowed);
+		}
+	}
+
+	@SuppressLint({ "SetJavaScriptEnabled" })
 	protected void init(Context context) {
 		if (context instanceof Activity) {
 			mActivity = new WeakReference<Activity>((Activity) context);
@@ -261,10 +269,7 @@ public class AdvancedWebView extends WebView {
 
 		final WebSettings webSettings = getSettings();
 		webSettings.setAllowFileAccess(false);
-		if (Build.VERSION.SDK_INT >= 16) {
-			webSettings.setAllowFileAccessFromFileURLs(false);
-			webSettings.setAllowUniversalAccessFromFileURLs(false);
-		}
+		setAllowAccessFromFileUrls(webSettings, false);
 		webSettings.setBuiltInZoomControls(false);
 		webSettings.setJavaScriptEnabled(true);
 		webSettings.setDomStorageEnabled(true);
@@ -346,23 +351,35 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-				if (mCustomWebViewClient != null) {
-					return mCustomWebViewClient.shouldInterceptRequest(view, url);
+				if (Build.VERSION.SDK_INT >= 11) {
+					if (mCustomWebViewClient != null) {
+						return mCustomWebViewClient.shouldInterceptRequest(view, url);
+					}
+					else {
+						return super.shouldInterceptRequest(view, url);
+					}
 				}
 				else {
-					return super.shouldInterceptRequest(view, url);
+					return null;
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-				if (mCustomWebViewClient != null) {
-					return mCustomWebViewClient.shouldInterceptRequest(view, request);
+				if (Build.VERSION.SDK_INT >= 21) {
+					if (mCustomWebViewClient != null) {
+						return mCustomWebViewClient.shouldInterceptRequest(view, request);
+					}
+					else {
+						return super.shouldInterceptRequest(view, request);
+					}
 				}
 				else {
-					return super.shouldInterceptRequest(view, request);
+					return null;
 				}
 			}
 
@@ -396,13 +413,16 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onReceivedClientCertRequest(WebView view, ClientCertRequest request) {
-				if (mCustomWebViewClient != null) {
-					mCustomWebViewClient.onReceivedClientCertRequest(view, request);
-				}
-				else {
-					super.onReceivedClientCertRequest(view, request);
+				if (Build.VERSION.SDK_INT >= 21) {
+					if (mCustomWebViewClient != null) {
+						mCustomWebViewClient.onReceivedClientCertRequest(view, request);
+					}
+					else {
+						super.onReceivedClientCertRequest(view, request);
+					}
 				}
 			}
 
@@ -436,13 +456,16 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onUnhandledInputEvent(WebView view, InputEvent event) {
-				if (mCustomWebViewClient != null) {
-					mCustomWebViewClient.onUnhandledInputEvent(view, event);
-				}
-				else {
-					super.onUnhandledInputEvent(view, event);
+				if (Build.VERSION.SDK_INT >= 21) {
+					if (mCustomWebViewClient != null) {
+						mCustomWebViewClient.onUnhandledInputEvent(view, event);
+					}
+					else {
+						super.onUnhandledInputEvent(view, event);
+					}
 				}
 			}
 
@@ -456,13 +479,16 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onReceivedLoginRequest(WebView view, String realm, String account, String args) {
-				if (mCustomWebViewClient != null) {
-					mCustomWebViewClient.onReceivedLoginRequest(view, realm, account, args);
-				}
-				else {
-					super.onReceivedLoginRequest(view, realm, account, args);
+				if (Build.VERSION.SDK_INT >= 12) {
+					if (mCustomWebViewClient != null) {
+						mCustomWebViewClient.onReceivedLoginRequest(view, realm, account, args);
+					}
+					else {
+						super.onReceivedLoginRequest(view, realm, account, args);
+					}
 				}
 			}
 
@@ -544,13 +570,16 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
-				if (mCustomWebChromeClient != null) {
-					mCustomWebChromeClient.onShowCustomView(view, requestedOrientation, callback);
-				}
-				else {
-					super.onShowCustomView(view, requestedOrientation, callback);
+				if (Build.VERSION.SDK_INT >= 14) {
+					if (mCustomWebChromeClient != null) {
+						mCustomWebChromeClient.onShowCustomView(view, requestedOrientation, callback);
+					}
+					else {
+						super.onShowCustomView(view, requestedOrientation, callback);
+					}
 				}
 			}
 
@@ -659,23 +688,29 @@ public class AdvancedWebView extends WebView {
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onPermissionRequest(PermissionRequest request) {
-				if (mCustomWebChromeClient != null) {
-					mCustomWebChromeClient.onPermissionRequest(request);
-				}
-				else {
-					super.onPermissionRequest(request);
+				if (Build.VERSION.SDK_INT >= 21) {
+					if (mCustomWebChromeClient != null) {
+						mCustomWebChromeClient.onPermissionRequest(request);
+					}
+					else {
+						super.onPermissionRequest(request);
+					}
 				}
 			}
 
+			@SuppressLint("NewApi")
 			@SuppressWarnings("all")
 			public void onPermissionRequestCanceled(PermissionRequest request) {
-				if (mCustomWebChromeClient != null) {
-					mCustomWebChromeClient.onPermissionRequestCanceled(request);
-				}
-				else {
-					super.onPermissionRequestCanceled(request);
+				if (Build.VERSION.SDK_INT >= 21) {
+					if (mCustomWebChromeClient != null) {
+						mCustomWebChromeClient.onPermissionRequestCanceled(request);
+					}
+					else {
+						super.onPermissionRequestCanceled(request);
+					}
 				}
 			}
 
