@@ -16,6 +16,7 @@ package im.delight.android.webview;
  * limitations under the License.
  */
 
+import java.util.HashMap;
 import android.net.http.SslError;
 import android.view.InputEvent;
 import android.view.KeyEvent;
@@ -76,7 +77,7 @@ public class AdvancedWebView extends WebView {
 	protected WeakReference<Activity> mActivity;
 	protected WeakReference<Fragment> mFragment;
 	protected Listener mListener;
-	protected List<String> mPermittedHostnames;
+	protected final List<String> mPermittedHostnames = new LinkedList<String>();
 	/** File upload callback for platform versions prior to Android 5.0 */
 	protected ValueCallback<Uri> mFileUploadCallbackFirst;
 	/** File upload callback for Android 5.0+ */
@@ -87,6 +88,7 @@ public class AdvancedWebView extends WebView {
 	protected WebViewClient mCustomWebViewClient;
 	protected WebChromeClient mCustomWebChromeClient;
 	protected boolean mGeolocationEnabled;
+	protected final Map<String, String> mHttpHeaders = new HashMap<String, String>();
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -211,6 +213,33 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
+	/**
+	 * Adds an additional HTTP header that will be sent along with every request
+	 *
+	 * If you later want to delete an HTTP header that was previously added this way, call `removeHttpHeader()`
+	 *
+	 * The `WebView` implementation may in some cases overwrite headers that you set or unset
+	 *
+	 * @param name the name of the HTTP header to add
+	 * @param value the value of the HTTP header to send
+	 */
+	public void addHttpHeader(final String name, final String value) {
+		mHttpHeaders.put(name, value);
+	}
+
+	/**
+	 * Removes one of the HTTP headers that have previously been added via `addHttpHeader()`
+	 *
+	 * If you want to unset a pre-defined header, set it to an empty string with `addHttpHeader()` instead
+	 *
+	 * The `WebView` implementation may in some cases overwrite headers that you set or unset
+	 *
+	 * @param name the name of the HTTP header to remove
+	 */
+	public void removeHttpHeader(final String name) {
+		mHttpHeaders.remove(name);
+	}
+
 	public void addPermittedHostname(String hostname) {
 		mPermittedHostnames.add(hostname);
 	}
@@ -256,8 +285,6 @@ public class AdvancedWebView extends WebView {
 		}
 
 		mLanguageIso3 = getLanguageIso3();
-
-		mPermittedHostnames = new LinkedList<String>();
 
 		setFocusable(true);
 		setFocusableInTouchMode(true);
@@ -806,6 +833,28 @@ public class AdvancedWebView extends WebView {
 			}
 
 		});
+	}
+
+	@Override
+	public void loadUrl(final String url, Map<String, String> additionalHttpHeaders) {
+		if (additionalHttpHeaders == null) {
+			additionalHttpHeaders = mHttpHeaders;
+		}
+		else if (mHttpHeaders.size() > 0) {
+			additionalHttpHeaders.putAll(mHttpHeaders);
+		}
+
+		super.loadUrl(url, additionalHttpHeaders);
+	}
+
+	@Override
+	public void loadUrl(final String url) {
+		if (mHttpHeaders.size() > 0) {
+			super.loadUrl(url, mHttpHeaders);
+		}
+		else {
+			super.loadUrl(url);
+		}
 	}
 
 	public void loadUrl(String url, final boolean preventCaching) {

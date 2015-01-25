@@ -174,6 +174,12 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.setGeolocationEnabled(true);
    ```
 
+ * Add custom HTTP headers in addition to the ones sent by the web browser implementation
+
+   ```
+   mWebView.addHttpHeader("X-Requested-With", "My wonderful app");
+   ```
+
  * Define a custom set of permitted hostnames and receive callbacks for all other hostnames
 
    ```
