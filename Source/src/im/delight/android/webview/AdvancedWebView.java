@@ -523,24 +523,24 @@ public class AdvancedWebView extends WebView {
 
 		super.setWebChromeClient(new WebChromeClient() {
 
-			// file upload callback (Android 2.2 -- 4.3) (hidden method)
+			// file upload callback (Android 2.2 (API level 8) -- Android 2.3 (API level 10)) (hidden method)
 			@SuppressWarnings("unused")
 			public void openFileChooser(ValueCallback<Uri> uploadMsg) {
 				openFileChooser(uploadMsg, null);
 			}
 
-			// file upload callback (Android 2.2 -- 4.3) (hidden method)
+			// file upload callback (Android 3.0 (API level 11) -- Android 4.0 (API level 15)) (hidden method)
 			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
 				openFileChooser(uploadMsg, acceptType, null);
 			}
 
-			// file upload callback (Android 2.2 -- 4.3) (hidden method)
+			// file upload callback (Android 4.1 (API level 16) -- Android 4.3 (API level 18)) (hidden method)
 			@SuppressWarnings("unused")
 			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
 				openFileInput(uploadMsg, null);
 			}
 
-			// file upload callback (Android 5.0+)
+			// file upload callback (Android 5.0 (API level 21) -- current) (public method)
 			@SuppressWarnings("all")
 			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
 				openFileInput(null, filePathCallback);
