@@ -991,4 +991,32 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
+	/**
+	 * Returns whether file uploads can be used on the current device (generally all platform versions except for 4.4)
+	 *
+	 * @return whether file uploads can be used
+	 */
+	public static boolean isFileUploadAvailable() {
+		return isFileUploadAvailable(false);
+	}
+
+	/**
+	 * Returns whether file uploads can be used on the current device (generally all platform versions except for 4.4)
+	 *
+	 * On Android 4.4.3/4.4.4, file uploads may be possible but will come with a wrong MIME type
+	 *
+	 * @param needsCorrectMimeType whether a correct MIME type is required for file uploads or `application/octet-stream` is acceptable
+	 * @return whether file uploads can be used
+	 */
+	public static boolean isFileUploadAvailable(final boolean needsCorrectMimeType) {
+		if (Build.VERSION.SDK_INT == 19) {
+			final String platformVersion = (Build.VERSION.RELEASE == null) ? "" : Build.VERSION.RELEASE;
+
+			return !needsCorrectMimeType && (platformVersion.startsWith("4.4.3") || platformVersion.startsWith("4.4.4"));
+		}
+		else {
+			return true;
+		}
+	}
+
 }

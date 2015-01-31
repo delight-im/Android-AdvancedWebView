@@ -137,7 +137,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Optimized for best performance and security
  * Features are patched across Android versions
- * File uploads are handled automatically
+ * File uploads are handled automatically (check availability with `AdvancedWebView.isFileUploadAvailable()`)
  * JavaScript and WebStorage are enabled by default
  * Includes localizations for the 25 most widely spoken languages
  * Receive callbacks when pages start/finish loading or have errors
