@@ -202,6 +202,14 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.loadUrl("http://www.example.org/", preventCaching);
    ```
 
+ * Check for alternative browsers installed on the device
+
+   ```
+   if (AdvancedWebView.Browsers.hasAlternative(this)) {
+       AdvancedWebView.Browsers.openUrl(this, "http://www.example.org/");
+   }
+   ```
+
 ## Dependencies
 
  * Android 2.2+
