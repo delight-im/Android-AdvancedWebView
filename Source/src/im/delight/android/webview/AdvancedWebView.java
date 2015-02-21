@@ -16,6 +16,7 @@ package im.delight.android.webview;
  * limitations under the License.
  */
 
+import android.webkit.CookieManager;
 import java.util.Arrays;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -283,6 +284,18 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
+	@SuppressWarnings("static-method")
+	public void setCookiesEnabled(final boolean enabled) {
+		CookieManager.getInstance().setAcceptCookie(enabled);
+	}
+
+	@SuppressLint("NewApi")
+	public void setThirdPartyCookiesEnabled(final boolean enabled) {
+		if (Build.VERSION.SDK_INT >= 21) {
+			CookieManager.getInstance().setAcceptThirdPartyCookies(this, enabled);
+		}
+	}
+
 	@SuppressLint({ "SetJavaScriptEnabled" })
 	protected void init(Context context) {
 		if (context instanceof Activity) {
@@ -312,6 +325,8 @@ public class AdvancedWebView extends WebView {
 		if (Build.VERSION.SDK_INT < 19) {
 			webSettings.setDatabasePath(databaseDir);
 		}
+
+		setThirdPartyCookiesEnabled(true);
 
 		super.setWebViewClient(new WebViewClient() {
 

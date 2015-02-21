@@ -210,6 +210,15 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    }
    ```
 
+ * Disable cookies
+
+   ```
+   // disable third-party cookies only
+   mWebView.setThirdPartyCookiesEnabled(false);
+   // or disable cookies in general
+   mWebView.setCookiesEnabled(false);
+   ```
+
 ## Dependencies
 
  * Android 2.2+
