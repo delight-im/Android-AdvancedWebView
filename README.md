@@ -219,6 +219,12 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.setCookiesEnabled(false);
    ```
 
+ * Disallow mixed content (HTTP content being loaded inside HTTPS sites)
+
+   ```
+   mWebView.setMixedContentAllowed(false);
+   ```
+
 ## Dependencies
 
  * Android 2.2+

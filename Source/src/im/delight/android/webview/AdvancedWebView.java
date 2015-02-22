@@ -296,6 +296,18 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
+	public void setMixedContentAllowed(final boolean allowed) {
+		setMixedContentAllowed(getSettings(), allowed);
+	}
+
+	@SuppressWarnings("static-method")
+	@SuppressLint("NewApi")
+	protected void setMixedContentAllowed(final WebSettings webSettings, final boolean allowed) {
+		if (Build.VERSION.SDK_INT >= 21) {
+			webSettings.setMixedContentMode(allowed ? WebSettings.MIXED_CONTENT_ALWAYS_ALLOW : WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+		}
+	}
+
 	@SuppressLint({ "SetJavaScriptEnabled" })
 	protected void init(Context context) {
 		if (context instanceof Activity) {
@@ -325,6 +337,7 @@ public class AdvancedWebView extends WebView {
 		if (Build.VERSION.SDK_INT < 19) {
 			webSettings.setDatabasePath(databaseDir);
 		}
+		setMixedContentAllowed(webSettings, true);
 
 		setThirdPartyCookiesEnabled(true);
 
