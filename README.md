@@ -46,21 +46,22 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 		mWebView = (AdvancedWebView) findViewById(R.id.webview);
 		mWebView.setListener(this, this);
 		mWebView.loadUrl("http://www.example.org/");
+		
+		// ...
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		mWebView.onActivityResult(requestCode, resultCode, intent);
-		// your normal onActivityResult(...) code here
+		// ...
 	}
 
 	@Override
 	public void onBackPressed() {
-		if (mWebView.onBackPressed()) {
-			// your normal onBackPressed() code here
-			super.onBackPressed();
-		}
+		if (!mWebView.onBackPressed()) { return; }
+		// ...
+		super.onBackPressed();
 	}
 
 	@Override
@@ -97,6 +98,8 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
         mWebView.loadUrl("http://www.example.org/");
+		
+		// ...
 
 		return rootView;
 	}
@@ -105,7 +108,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         mWebView.onActivityResult(requestCode, resultCode, intent);
-        // your normal onActivityResult(...) code here
+        // ...
     }
 
 	@Override
