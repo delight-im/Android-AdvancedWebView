@@ -184,6 +184,28 @@ public class AdvancedWebView extends WebView {
 		getSettings().setGeolocationDatabasePath(activity.getFilesDir().getPath());
 	}
 
+	@SuppressLint("NewApi")
+	@SuppressWarnings("all")
+	public void onResume() {
+		if (Build.VERSION.SDK_INT >= 11) {
+			super.onResume();
+		}
+		resumeTimers();
+	}
+
+	@SuppressLint("NewApi")
+	@SuppressWarnings("all")
+	public void onPause() {
+		pauseTimers();
+		if (Build.VERSION.SDK_INT >= 11) {
+			super.onPause();
+		}
+	}
+
+	public void onDestroy() {
+		destroy();
+	}
+
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
 		if (requestCode == mRequestCodeFilePicker) {
 			if (resultCode == Activity.RESULT_OK) {

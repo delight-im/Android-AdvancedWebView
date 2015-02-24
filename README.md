@@ -51,6 +51,27 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		mWebView.onResume();
+		// ...
+	}
+
+	@Override
+	protected void onPause() {
+		mWebView.onPause();
+		// ...
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		mWebView.onDestroy();
+		// ...
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		mWebView.onActivityResult(requestCode, resultCode, intent);
@@ -102,6 +123,27 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 		// ...
 
 		return rootView;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		mWebView.onResume();
+		// ...
+	}
+
+	@Override
+	public void onPause() {
+		mWebView.onPause();
+		// ...
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		mWebView.onDestroy();
+		// ...
+		super.onDestroy();
 	}
 
     @Override
