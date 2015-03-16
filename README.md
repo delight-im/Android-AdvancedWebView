@@ -214,6 +214,18 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    @Override
    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
        // some file is available for download
+	   // either handle the download yourself or use the code below
+	   
+	   final String filename;
+	   // ...
+	   
+	   if (AdvancedWebView.handleDownload(this, url, filename)) {
+	       // download successfully handled
+	   }
+	   else {
+	       // download couldn't be handled because user has disabled download manager app on the device
+	       // TODO show some notice to the user
+	   }
    }
    ```
 
