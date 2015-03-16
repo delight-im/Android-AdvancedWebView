@@ -50,6 +50,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 		// ...
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -57,6 +58,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 		// ...
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onPause() {
 		mWebView.onPause();
@@ -125,6 +127,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 		return rootView;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -132,6 +135,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 		// ...
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onPause() {
 		mWebView.onPause();
