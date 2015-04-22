@@ -16,6 +16,7 @@ package im.delight.android.webview;
  * limitations under the License.
  */
 
+import android.view.ViewGroup;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
 import android.os.Environment;
@@ -207,6 +208,19 @@ public class AdvancedWebView extends WebView {
 	}
 
 	public void onDestroy() {
+		// try to remove this view from its parent first
+		try {
+			((ViewGroup) getParent()).removeView(this);
+		}
+		catch (Exception e) { }
+
+		// then try to remove all child views from this view
+		try {
+			removeAllViews();
+		}
+		catch (Exception e) { }
+
+		// and finally destroy this view
 		destroy();
 	}
 
