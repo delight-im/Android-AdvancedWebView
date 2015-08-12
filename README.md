@@ -105,7 +105,9 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 }
 ```
 
-#### With Fragments
+#### With Fragments (`android.app.Fragment`)
+
+**Note:** If you're using the `Fragment` class from the support library (`android.support.v4.app.Fragment`), please refer to the next section (see below) instead of this one.
 
 ```
 public class MyFragment extends Fragment implements AdvancedWebView.Listener {
@@ -174,6 +176,32 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
 }
 ```
+
+#### With Fragments from the support library (`android.support.v4.app.Fragment`)
+
+ * Use the code for normal `Fragment` usage as shown above
+ * Change
+
+   `mWebView.setListener(this, this);`
+
+   to
+
+   `mWebView.setListener(getActivity(), this);`
+ * Add the following code to the parent `FragmentActivity` in order to forward the results from the `FragmentActivity` to the appropriate `Fragment` instance
+
+   ```
+   public class MyActivity extends FragmentActivity implements AdvancedWebView.Listener {
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		if (mFragment != null) {
+			mFragment.onActivityResult(requestCode, resultCode, intent);
+		}
+	}
+
+   }
+   ```
 
 ### ProGuard (if enabled)
 
