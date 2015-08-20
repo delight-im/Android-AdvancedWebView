@@ -70,12 +70,12 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class AdvancedWebView extends WebView {
 
-	public static interface Listener {
-		public void onPageStarted(String url, Bitmap favicon);
-		public void onPageFinished(String url);
-		public void onPageError(int errorCode, String description, String failingUrl);
-		public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
-		public void onExternalPageRequest(String url);
+	public interface Listener {
+		void onPageStarted(String url, Bitmap favicon);
+		void onPageFinished(String url);
+		void onPageError(int errorCode, String description, String failingUrl);
+		void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
+		void onExternalPageRequest(String url);
 	}
 
 	public static final String PACKAGE_NAME_DOWNLOAD_MANAGER = "com.android.providers.downloads";
@@ -1013,7 +1013,7 @@ public class AdvancedWebView extends WebView {
 			else if (mLanguageIso3.equals("rus")) return decodeBase64("0JLRi9Cx0LXRgNC40YLQtSDQvtC00LjQvSDRhNCw0LnQuw==");
 			else if (mLanguageIso3.equals("jpn")) return decodeBase64("MeODleOCoeOCpOODq+OCkumBuOaKnuOBl+OBpuOBj+OBoOOBleOBhA==");
 			else if (mLanguageIso3.equals("pan")) return decodeBase64("4KiH4Kmx4KiVIOCoq+CovuCoh+CosiDgqJrgqYHgqKPgqYs=");
-			else if (mLanguageIso3.equals("deu")) return "Wähle eine Datei";
+			else if (mLanguageIso3.equals("deu")) return "WÃ¤hle eine Datei";
 			else if (mLanguageIso3.equals("jav")) return "Pilih siji berkas";
 			else if (mLanguageIso3.equals("msa")) return "Pilih satu fail";
 			else if (mLanguageIso3.equals("tel")) return decodeBase64("4LCS4LCVIOCwq+CxhuCxluCwsuCxjeCwqOCxgSDgsI7gsILgsJrgsYHgsJXgsYvgsILgsKHgsL8=");
@@ -1024,7 +1024,7 @@ public class AdvancedWebView extends WebView {
 			else if (mLanguageIso3.equals("tam")) return decodeBase64("4K6S4K6w4K+BIOCuleCvh+CuvuCuquCvjeCuquCviCDgrqTgr4fgrrDgr43grrXgr4E=");
 			else if (mLanguageIso3.equals("urd")) return decodeBase64("2KfbjNqpINmB2KfYptmEINmF24zauiDYs9uSINin2YbYqtiu2KfYqCDaqdix24zaug==");
 			else if (mLanguageIso3.equals("fas")) return decodeBase64("2LHYpyDYp9mG2KrYrtin2Kgg2qnZhtuM2K8g24zaqSDZgdin24zZhA==");
-			else if (mLanguageIso3.equals("tur")) return "Bir dosya seçin";
+			else if (mLanguageIso3.equals("tur")) return "Bir dosya seÃ§in";
 			else if (mLanguageIso3.equals("ita")) return "Scegli un file";
 			else if (mLanguageIso3.equals("tha")) return decodeBase64("4LmA4Lil4Li34Lit4LiB4LmE4Lif4Lil4LmM4Lir4LiZ4Li24LmI4LiH");
 			else if (mLanguageIso3.equals("guj")) return decodeBase64("4KqP4KqVIOCqq+CqvuCqh+CqsuCqqOCrhyDgqqrgqrjgqoLgqqY=");
