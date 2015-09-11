@@ -100,6 +100,7 @@ public class AdvancedWebView extends WebView {
 	protected WebChromeClient mCustomWebChromeClient;
 	protected boolean mGeolocationEnabled;
 	protected final Map<String, String> mHttpHeaders = new HashMap<String, String>();
+	private boolean bUseMultiple = false;
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -235,7 +236,16 @@ public class AdvancedWebView extends WebView {
 					else if (mFileUploadCallbackSecond != null) {
 						Uri[] dataUris;
 						try {
-							dataUris = new Uri[] { Uri.parse(intent.getDataString()) };
+							if (intent.getDataString() != null) {
+                                dataUris = new Uri[]{Uri.parse(intent.getDataString())};
+                            } else if (intent.getClipData() != null) {
+                                dataUris = new Uri[intent.getClipData().getItemCount()];
+                                for (int i = 0; i < intent.getClipData().getItemCount(); ++i) {
+                                    dataUris[i] = intent.getClipData().getItemAt(i).getUri();
+                                }
+                            } else {
+                                throw new Exception("No file find");
+                            }
 						}
 						catch (Exception e) {
 							dataUris = null;
@@ -1055,6 +1065,7 @@ public class AdvancedWebView extends WebView {
 		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 		i.addCategory(Intent.CATEGORY_OPENABLE);
 		i.setType("*/*");
+		i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, bUseMultiple);
 
 		if (mFragment != null && mFragment.get() != null && Build.VERSION.SDK_INT >= 11) {
 			mFragment.get().startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
@@ -1235,5 +1246,9 @@ public class AdvancedWebView extends WebView {
 		}
 
 	}
+
+	public void setbUseMultiple(boolean bUseMultiple) {
+        this.bUseMultiple = bUseMultiple;
+    }
 
 }
