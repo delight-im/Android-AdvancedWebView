@@ -70,12 +70,12 @@ import java.util.Map;
 @SuppressWarnings("deprecation")
 public class AdvancedWebView extends WebView {
 
-	public static interface Listener {
-		public void onPageStarted(String url, Bitmap favicon);
-		public void onPageFinished(String url);
-		public void onPageError(int errorCode, String description, String failingUrl);
-		public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
-		public void onExternalPageRequest(String url);
+	public interface Listener {
+		void onPageStarted(String url, Bitmap favicon);
+		void onPageFinished(String url);
+		void onPageError(int errorCode, String description, String failingUrl);
+		void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
+		void onExternalPageRequest(String url);
 	}
 
 	public static final String PACKAGE_NAME_DOWNLOAD_MANAGER = "com.android.providers.downloads";
