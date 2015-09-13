@@ -16,13 +16,13 @@ Works on Android 2.2+ (API level 8 and above)
 
 ### AndroidManifest.xml
 
-```
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
 ### Layout (XML)
 
-```
+```xml
 <im.delight.android.webview.AdvancedWebView
 	android:id="@+id/webview"
 	android:layout_width="match_parent"
@@ -33,7 +33,7 @@ Works on Android 2.2+ (API level 8 and above)
 
 #### Without Fragments
 
-```
+```java
 public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
 	private AdvancedWebView mWebView;
@@ -109,7 +109,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
 **Note:** If you're using the `Fragment` class from the support library (`android.support.v4.app.Fragment`), please refer to the next section (see below) instead of this one.
 
-```
+```java
 public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
 	private AdvancedWebView mWebView;
@@ -182,14 +182,19 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
  * Use the code for normal `Fragment` usage as shown above
  * Change
 
-   `mWebView.setListener(this, this);`
+   ```java
+   mWebView.setListener(this, this);
+   ```
 
    to
 
-   `mWebView.setListener(getActivity(), this);`
+   ```java
+   mWebView.setListener(getActivity(), this);
+   ```
+
  * Add the following code to the parent `FragmentActivity` in order to forward the results from the `FragmentActivity` to the appropriate `Fragment` instance
 
-   ```
+   ```java
    public class MyActivity extends FragmentActivity implements AdvancedWebView.Listener {
 
 	@Override
@@ -219,7 +224,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
  * Includes localizations for the 25 most widely spoken languages
  * Receive callbacks when pages start/finish loading or have errors
 
-   ```
+   ```java
    @Override
    public void onPageStarted(String url, Bitmap favicon) {
        // a new page started loading
@@ -238,7 +243,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Downloads are handled automatically and can be listened to
 
-   ```
+   ```java
    @Override
    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
        // some file is available for download
@@ -259,25 +264,25 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Enable geolocation support (needs `<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />`)
 
-   ```
+   ```java
    mWebView.setGeolocationEnabled(true);
    ```
 
  * Add custom HTTP headers in addition to the ones sent by the web browser implementation
 
-   ```
+   ```java
    mWebView.addHttpHeader("X-Requested-With", "My wonderful app");
    ```
 
  * Define a custom set of permitted hostnames and receive callbacks for all other hostnames
 
-   ```
+   ```java
    mWebView.addPermittedHostname("www.example.org");
    ```
 
    and
 
-   ```
+   ```java
    @Override
    public void onExternalPageRequest(String url) {
        // the user tried to open a page from a non-permitted hostname
@@ -286,14 +291,14 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Prevent caching of HTML pages
 
-   ```
+   ```java
    boolean preventCaching = true;
    mWebView.loadUrl("http://www.example.org/", preventCaching);
    ```
 
  * Check for alternative browsers installed on the device
 
-   ```
+   ```java
    if (AdvancedWebView.Browsers.hasAlternative(this)) {
        AdvancedWebView.Browsers.openUrl(this, "http://www.example.org/");
    }
@@ -301,7 +306,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Disable cookies
 
-   ```
+   ```java
    // disable third-party cookies only
    mWebView.setThirdPartyCookiesEnabled(false);
    // or disable cookies in general
@@ -310,7 +315,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
  * Disallow mixed content (HTTP content being loaded inside HTTPS sites)
 
-   ```
+   ```java
    mWebView.setMixedContentAllowed(false);
    ```
 
