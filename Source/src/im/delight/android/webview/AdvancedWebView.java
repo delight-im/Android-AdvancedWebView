@@ -99,6 +99,7 @@ public class AdvancedWebView extends WebView {
 	protected WebViewClient mCustomWebViewClient;
 	protected WebChromeClient mCustomWebChromeClient;
 	protected boolean mGeolocationEnabled;
+	protected String mUploadableFileTypes = "*/*";
 	protected final Map<String, String> mHttpHeaders = new HashMap<String, String>();
 
 	public AdvancedWebView(Context context) {
@@ -187,6 +188,10 @@ public class AdvancedWebView extends WebView {
 		}
 
 		getSettings().setGeolocationDatabasePath(activity.getFilesDir().getPath());
+	}
+
+	public void setUploadableFileTypes(final String mimeType) {
+		mUploadableFileTypes = mimeType;
 	}
 
 	@SuppressLint("NewApi")
@@ -1054,7 +1059,7 @@ public class AdvancedWebView extends WebView {
 
 		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 		i.addCategory(Intent.CATEGORY_OPENABLE);
-		i.setType("*/*");
+		i.setType(mUploadableFileTypes);
 
 		if (mFragment != null && mFragment.get() != null && Build.VERSION.SDK_INT >= 11) {
 			mFragment.get().startActivityForResult(Intent.createChooser(i, getFileUploadPromptLabel()), mRequestCodeFilePicker);
