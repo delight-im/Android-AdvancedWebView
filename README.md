@@ -37,7 +37,7 @@ Works on Android 2.2+ (API level 8 and above)
 public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
 	private AdvancedWebView mWebView;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 		mWebView = (AdvancedWebView) findViewById(R.id.webview);
 		mWebView.setListener(this, this);
 		mWebView.loadUrl("http://www.example.org/");
-		
+
 		// ...
 	}
 
@@ -123,7 +123,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
         mWebView.loadUrl("http://www.example.org/");
-		
+
 		// ...
 
 		return rootView;
@@ -248,10 +248,10 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
        // some file is available for download
 	   // either handle the download yourself or use the code below
-	   
+
 	   final String filename;
 	   // ...
-	   
+
 	   if (AdvancedWebView.handleDownload(this, url, filename)) {
 	       // download successfully handled
 	   }
