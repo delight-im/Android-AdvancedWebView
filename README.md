@@ -24,9 +24,9 @@ Works on Android 2.2+ (API level 8 and above)
 
 ```xml
 <im.delight.android.webview.AdvancedWebView
-	android:id="@+id/webview"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent" />
+    android:id="@+id/webview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 ```
 
 ### Activity (Java)
@@ -36,71 +36,71 @@ Works on Android 2.2+ (API level 8 and above)
 ```java
 public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
-	private AdvancedWebView mWebView;
+    private AdvancedWebView mWebView;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_my);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my);
 
-		mWebView = (AdvancedWebView) findViewById(R.id.webview);
-		mWebView.setListener(this, this);
-		mWebView.loadUrl("http://www.example.org/");
+        mWebView = (AdvancedWebView) findViewById(R.id.webview);
+        mWebView.setListener(this, this);
+        mWebView.loadUrl("http://www.example.org/");
 
-		// ...
-	}
+        // ...
+    }
 
-	@SuppressLint("NewApi")
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mWebView.onResume();
-		// ...
-	}
+    @SuppressLint("NewApi")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWebView.onResume();
+        // ...
+    }
 
-	@SuppressLint("NewApi")
-	@Override
-	protected void onPause() {
-		mWebView.onPause();
-		// ...
-		super.onPause();
-	}
+    @SuppressLint("NewApi")
+    @Override
+    protected void onPause() {
+        mWebView.onPause();
+        // ...
+        super.onPause();
+    }
 
-	@Override
-	protected void onDestroy() {
-		mWebView.onDestroy();
-		// ...
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy() {
+        mWebView.onDestroy();
+        // ...
+        super.onDestroy();
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		mWebView.onActivityResult(requestCode, resultCode, intent);
-		// ...
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        mWebView.onActivityResult(requestCode, resultCode, intent);
+        // ...
+    }
 
-	@Override
-	public void onBackPressed() {
-		if (!mWebView.onBackPressed()) { return; }
-		// ...
-		super.onBackPressed();
-	}
+    @Override
+    public void onBackPressed() {
+        if (!mWebView.onBackPressed()) { return; }
+        // ...
+        super.onBackPressed();
+    }
 
-	@Override
-	public void onPageStarted(String url, Bitmap favicon) { }
+    @Override
+    public void onPageStarted(String url, Bitmap favicon) { }
 
-	@Override
-	public void onPageFinished(String url) { }
+    @Override
+    public void onPageFinished(String url) { }
 
-	@Override
-	public void onPageError(int errorCode, String description, String failingUrl) { }
+    @Override
+    public void onPageError(int errorCode, String description, String failingUrl) { }
 
-	@Override
-	public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+    @Override
+    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
 
-	@Override
-	public void onExternalPageRequest(String url) { }
+    @Override
+    public void onExternalPageRequest(String url) { }
 
 }
 ```
@@ -112,45 +112,45 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 ```java
 public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
-	private AdvancedWebView mWebView;
+    private AdvancedWebView mWebView;
 
-	public MyFragment() { }
+    public MyFragment() { }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_my, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_my, container, false);
 
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
         mWebView.loadUrl("http://www.example.org/");
 
-		// ...
+        // ...
 
-		return rootView;
-	}
+        return rootView;
+    }
 
-	@SuppressLint("NewApi")
-	@Override
-	public void onResume() {
-		super.onResume();
-		mWebView.onResume();
-		// ...
-	}
+    @SuppressLint("NewApi")
+    @Override
+    public void onResume() {
+        super.onResume();
+        mWebView.onResume();
+        // ...
+    }
 
-	@SuppressLint("NewApi")
-	@Override
-	public void onPause() {
-		mWebView.onPause();
-		// ...
-		super.onPause();
-	}
+    @SuppressLint("NewApi")
+    @Override
+    public void onPause() {
+        mWebView.onPause();
+        // ...
+        super.onPause();
+    }
 
-	@Override
-	public void onDestroy() {
-		mWebView.onDestroy();
-		// ...
-		super.onDestroy();
-	}
+    @Override
+    public void onDestroy() {
+        mWebView.onDestroy();
+        // ...
+        super.onDestroy();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -159,20 +159,20 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
         // ...
     }
 
-	@Override
-	public void onPageStarted(String url, Bitmap favicon) { }
+    @Override
+    public void onPageStarted(String url, Bitmap favicon) { }
 
-	@Override
-	public void onPageFinished(String url) { }
+    @Override
+    public void onPageFinished(String url) { }
 
-	@Override
-	public void onPageError(int errorCode, String description, String failingUrl) { }
+    @Override
+    public void onPageError(int errorCode, String description, String failingUrl) { }
 
-	@Override
-	public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+    @Override
+    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
 
-	@Override
-	public void onExternalPageRequest(String url) { }
+    @Override
+    public void onExternalPageRequest(String url) { }
 
 }
 ```
@@ -197,13 +197,13 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    ```java
    public class MyActivity extends FragmentActivity implements AdvancedWebView.Listener {
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-		if (mFragment != null) {
-			mFragment.onActivityResult(requestCode, resultCode, intent);
-		}
-	}
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (mFragment != null) {
+            mFragment.onActivityResult(requestCode, resultCode, intent);
+        }
+    }
 
    }
    ```
@@ -247,18 +247,18 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    @Override
    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
        // some file is available for download
-	   // either handle the download yourself or use the code below
+       // either handle the download yourself or use the code below
 
-	   final String filename;
-	   // ...
+       final String filename;
+       // ...
 
-	   if (AdvancedWebView.handleDownload(this, url, filename)) {
-	       // download successfully handled
-	   }
-	   else {
-	       // download couldn't be handled because user has disabled download manager app on the device
-	       // TODO show some notice to the user
-	   }
+       if (AdvancedWebView.handleDownload(this, url, filename)) {
+           // download successfully handled
+       }
+       else {
+           // download couldn't be handled because user has disabled download manager app on the device
+           // TODO show some notice to the user
+       }
    }
    ```
 
