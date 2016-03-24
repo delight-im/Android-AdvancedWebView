@@ -319,6 +319,29 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.setMixedContentAllowed(false);
    ```
 
+ * Enable multi-window support
+
+   ```java
+   myWebView.getSettings().setSupportMultipleWindows(true);
+   // myWebView.getSettings().setJavaScriptEnabled(true);
+   // myWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+   myWebView.setWebChromeClient(new WebChromeClient() {
+
+       @Override
+       public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+           AdvancedWebView newWebView = new AdvancedWebView(MyNewActivity.this);
+           // myParentLayout.addView(newWebView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+           WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+           transport.setWebView(newWebView);
+           resultMsg.sendToTarget();
+
+           return true;
+       }
+
+   }
+   ```
+
 ## Dependencies
 
  * Android 2.2+
