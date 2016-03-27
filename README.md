@@ -2,7 +2,9 @@
 
 Advanced WebView component for Android that works as intended out of the box
 
-Works on Android 2.2+ (API level 8 and above)
+## Requirements
+
+ * Android 2.2+
 
 ## Installation
 
@@ -354,10 +356,6 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    }
    ```
-
-## Dependencies
-
- * Android 2.2+
 
 ## Contributing
 
