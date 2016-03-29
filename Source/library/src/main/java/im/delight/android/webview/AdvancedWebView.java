@@ -353,6 +353,24 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
+	public void setDesktopMode(final boolean enabled) {
+		final WebSettings webSettings = getSettings();
+
+		final String newUserAgent;
+		if (enabled) {
+			newUserAgent = webSettings.getUserAgentString().replace("Mobile", "eliboM").replace("Android", "diordnA");
+		}
+		else {
+			newUserAgent = webSettings.getUserAgentString().replace("eliboM", "Mobile").replace("diordnA", "Android");
+		}
+
+		webSettings.setUserAgentString(newUserAgent);
+		webSettings.setUseWideViewPort(enabled);
+		webSettings.setLoadWithOverviewMode(enabled);
+		webSettings.setSupportZoom(enabled);
+		webSettings.setBuiltInZoomControls(enabled);
+	}
+
 	@SuppressLint({ "SetJavaScriptEnabled" })
 	protected void init(Context context) {
 		if (context instanceof Activity) {
