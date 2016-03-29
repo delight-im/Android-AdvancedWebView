@@ -265,7 +265,9 @@ public class AdvancedWebView extends WebView {
 	}
 
 	/**
-	 * Adds an additional HTTP header that will be sent along with every request
+	 * Adds an additional HTTP header that will be sent along with every HTTP `GET` request
+	 *
+	 * This does only affect the main requests, not the requests to included resources (e.g. images)
 	 *
 	 * If you later want to delete an HTTP header that was previously added this way, call `removeHttpHeader()`
 	 *
@@ -446,22 +448,33 @@ public class AdvancedWebView extends WebView {
 			}
 
 			@Override
-			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				if (isHostnameAllowed(url)) {
-					if (mCustomWebViewClient != null) {
-						return mCustomWebViewClient.shouldOverrideUrlLoading(view, url);
-					}
-					else {
-						return false;
-					}
-				}
-				else {
+			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
+				// if the hostname may not be accessed
+				if (!isHostnameAllowed(url)) {
+					// if a listener is available
 					if (mListener != null) {
+						// inform the listener about the request
 						mListener.onExternalPageRequest(url);
 					}
 
+					// cancel the original request
 					return true;
 				}
+
+				// if there is a user-specified handler available
+				if (mCustomWebViewClient != null) {
+					// if the user-specified handler asks to override the request
+					if (mCustomWebViewClient.shouldOverrideUrlLoading(view, url)) {
+						// cancel the original request
+						return true;
+					}
+				}
+
+				// route the request through the custom URL loading method
+				view.loadUrl(url);
+
+				// cancel the original request
+				return true;
 			}
 
 			@Override
