@@ -334,6 +334,14 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.setMixedContentAllowed(false);
    ```
 
+ * Switch between mobile and desktop mode
+
+   ```java
+   mWebView.setDesktopMode(true);
+   // or
+   // mWebView.setDesktopMode(false);
+   ```
+
  * Enable multi-window support
 
    ```java
