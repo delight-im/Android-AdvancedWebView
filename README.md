@@ -1,6 +1,6 @@
 # AdvancedWebView
 
-Advanced WebView component for Android that works as intended out of the box
+Enhanced WebView component for Android that works as intended out of the box
 
 ## Requirements
 
