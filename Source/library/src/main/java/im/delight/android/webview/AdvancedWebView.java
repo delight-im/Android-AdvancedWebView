@@ -1008,14 +1008,11 @@ public class AdvancedWebView extends WebView {
 			return true;
 		}
 
-		url = url.replace("http://", "");
-		url = url.replace("https://", "");
-
 		for (String hostname : mPermittedHostnames) {
-			if (url.startsWith(hostname)) {
-				return true;
-			}
-		}
+            		if (Uri.parse(url).getHost().endsWith(hostname)) {
+                	return true;
+            		}
+        	}
 
 		return false;
 	}
