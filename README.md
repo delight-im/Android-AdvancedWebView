@@ -292,7 +292,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
  * Define a custom set of permitted hostnames and receive callbacks for all other hostnames
 
    ```java
-   mWebView.addPermittedHostname("www.example.org");
+   mWebView.addPermittedHostname("example.org");
    ```
 
    and
