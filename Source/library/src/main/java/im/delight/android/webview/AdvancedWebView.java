@@ -1003,20 +1003,26 @@ public class AdvancedWebView extends WebView {
 		return unique.toString();
 	}
 
-	protected boolean isHostnameAllowed(String url) {
+	protected boolean isHostnameAllowed(final String url) {
+		// if the permitted hostnames have not been restricted to a specific set
 		if (mPermittedHostnames.size() == 0) {
+			// all hostnames are allowed
 			return true;
 		}
 
-		url = url.replace("http://", "");
-		url = url.replace("https://", "");
+		// get the actual hostname of the URL that is to be checked
+		final String actualHost = Uri.parse(url).getHost();
 
-		for (String hostname : mPermittedHostnames) {
-			if (url.startsWith(hostname)) {
+		// for every hostname in the set of permitted hosts
+		for (String expectedHost : mPermittedHostnames) {
+			// if the two hostnames match or if the actual host is a subdomain of the expected host
+			if (actualHost.equals(expectedHost) || actualHost.endsWith("."+expectedHost)) {
+				// the actual hostname of the URL to be checked is allowed
 				return true;
 			}
 		}
 
+		// the actual hostname of the URL to be checked is not allowed since there were no matches
 		return false;
 	}
 
