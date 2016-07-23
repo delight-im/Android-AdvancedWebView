@@ -365,6 +365,12 @@ public class AdvancedWebView extends WebView {
 
 	@SuppressLint({ "SetJavaScriptEnabled" })
 	protected void init(Context context) {
+		// in IDE's preview mode
+		if (isInEditMode()) {
+			// do not run the code from this method
+			return;
+		}
+
 		if (context instanceof Activity) {
 			mActivity = new WeakReference<Activity>((Activity) context);
 		}
