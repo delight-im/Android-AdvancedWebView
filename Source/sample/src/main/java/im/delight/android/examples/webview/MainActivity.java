@@ -102,12 +102,10 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 	}
 
 	@Override
-	public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-		Toast.makeText(MainActivity.this, "onDownloadRequested(url = "+url+",  userAgent = "+userAgent+",  contentDisposition = "+contentDisposition+",  mimetype = "+mimetype+",  contentLength = "+contentLength+")", Toast.LENGTH_LONG).show();
+	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
+		Toast.makeText(MainActivity.this, "onDownloadRequested(url = "+url+",  suggestedFilename = "+suggestedFilename+",  mimeType = "+mimeType+",  contentLength = "+contentLength+",  contentDisposition = "+contentDisposition+",  userAgent = "+userAgent+")", Toast.LENGTH_LONG).show();
 
-		/*final String filename = UUID.randomUUID().toString();
-
-		if (AdvancedWebView.handleDownload(this, url, filename)) {
+		/*if (AdvancedWebView.handleDownload(this, url, suggestedFilename)) {
 			// download successfully handled
 		}
 		else {

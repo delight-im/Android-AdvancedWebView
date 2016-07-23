@@ -112,7 +112,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
     public void onPageError(int errorCode, String description, String failingUrl) { }
 
     @Override
-    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }
 
     @Override
     public void onExternalPageRequest(String url) { }
@@ -184,7 +184,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
     public void onPageError(int errorCode, String description, String failingUrl) { }
 
     @Override
-    public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) { }
+    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }
 
     @Override
     public void onExternalPageRequest(String url) { }
@@ -260,14 +260,11 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    ```java
    @Override
-   public void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+   public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
        // some file is available for download
        // either handle the download yourself or use the code below
 
-       final String filename;
-       // ...
-
-       if (AdvancedWebView.handleDownload(this, url, filename)) {
+       if (AdvancedWebView.handleDownload(this, url, suggestedFilename)) {
            // download successfully handled
        }
        else {

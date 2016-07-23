@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.webkit.ClientCertRequest;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
+import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.os.Message;
@@ -64,7 +65,7 @@ public class AdvancedWebView extends WebView {
 		void onPageStarted(String url, Bitmap favicon);
 		void onPageFinished(String url);
 		void onPageError(int errorCode, String description, String failingUrl);
-		void onDownloadRequested(String url, String userAgent, String contentDisposition, String mimetype, long contentLength);
+		void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent);
 		void onExternalPageRequest(String url);
 	}
 
@@ -973,9 +974,11 @@ public class AdvancedWebView extends WebView {
 		setDownloadListener(new DownloadListener() {
 
 			@Override
-			public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+			public void onDownloadStart(final String url, final String userAgent, final String contentDisposition, final String mimeType, final long contentLength) {
+				final String suggestedFilename = URLUtil.guessFileName(url, contentDisposition, mimeType);
+
 				if (mListener != null) {
-					mListener.onDownloadRequested(url, userAgent, contentDisposition, mimetype, contentLength);
+					mListener.onDownloadRequested(url, suggestedFilename, mimeType, contentLength, contentDisposition, userAgent);
 				}
 			}
 
