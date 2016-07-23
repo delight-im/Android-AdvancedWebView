@@ -342,6 +342,17 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    // mWebView.setDesktopMode(false);
    ```
 
+ * Load HTML source text and display as page
+
+   ```java
+   myWebView.loadHtml("<html>...</html>");
+
+   // or
+
+   final String myBaseUrl = "http://www.example.com/";
+   myWebView.loadHtml("<html>...</html>", myBaseUrl);
+   ```
+
  * Enable multi-window support
 
    ```java

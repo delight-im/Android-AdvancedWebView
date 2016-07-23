@@ -184,6 +184,48 @@ public class AdvancedWebView extends WebView {
 		mUploadableFileTypes = mimeType;
 	}
 
+	/**
+	 * Loads and displays the provided HTML source text
+	 *
+	 * @param html the HTML source text to load
+	 */
+	public void loadHtml(final String html) {
+		loadHtml(html, null);
+	}
+
+	/**
+	 * Loads and displays the provided HTML source text
+	 *
+	 * @param html the HTML source text to load
+	 * @param baseUrl the URL to use as the page's base URL
+	 */
+	public void loadHtml(final String html, final String baseUrl) {
+		loadHtml(html, baseUrl, null);
+	}
+
+	/**
+	 * Loads and displays the provided HTML source text
+	 *
+	 * @param html the HTML source text to load
+	 * @param baseUrl the URL to use as the page's base URL
+	 * @param historyUrl the URL to use for the page's history entry
+	 */
+	public void loadHtml(final String html, final String baseUrl, final String historyUrl) {
+		loadHtml(html, baseUrl, historyUrl, "utf-8");
+	}
+
+	/**
+	 * Loads and displays the provided HTML source text
+	 *
+	 * @param html the HTML source text to load
+	 * @param baseUrl the URL to use as the page's base URL
+	 * @param historyUrl the URL to use for the page's history entry
+	 * @param encoding the encoding or charset of the HTML source text
+	 */
+	public void loadHtml(final String html, final String baseUrl, final String historyUrl, final String encoding) {
+		loadDataWithBaseURL(baseUrl, html, "text/html", encoding, historyUrl);
+	}
+
 	@SuppressLint("NewApi")
 	@SuppressWarnings("all")
 	public void onResume() {
