@@ -250,13 +250,13 @@ public class AdvancedWebView extends WebView {
 		try {
 			((ViewGroup) getParent()).removeView(this);
 		}
-		catch (Exception e) { }
+		catch (Exception ignored) { }
 
 		// then try to remove all child views from this view
 		try {
 			removeAllViews();
 		}
-		catch (Exception e) { }
+		catch (Exception ignored) { }
 
 		// and finally destroy this view
 		destroy();
@@ -1134,7 +1134,7 @@ public class AdvancedWebView extends WebView {
 			else if (mLanguageIso3.equals("tha")) return decodeBase64("4LmA4Lil4Li34Lit4LiB4LmE4Lif4Lil4LmM4Lir4LiZ4Li24LmI4LiH");
 			else if (mLanguageIso3.equals("guj")) return decodeBase64("4KqP4KqVIOCqq+CqvuCqh+CqsuCqqOCrhyDgqqrgqrjgqoLgqqY=");
 		}
-		catch (Exception e) { }
+		catch (Exception ignored) { }
 
 		// return English translation by default
 		return "Choose a file";
