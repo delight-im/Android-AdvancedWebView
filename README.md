@@ -23,7 +23,7 @@ Enhanced WebView component for Android that works as intended out of the box
 
      ```gradle
      dependencies {
-         compile 'com.github.delight-im:Android-AdvancedWebView:v2.1.1'
+         compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
      }
      ```
 
