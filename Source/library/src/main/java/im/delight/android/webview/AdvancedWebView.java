@@ -271,13 +271,27 @@ public class AdvancedWebView extends WebView {
 						mFileUploadCallbackFirst = null;
 					}
 					else if (mFileUploadCallbackSecond != null) {
-						Uri[] dataUris;
+						Uri[] dataUris = null;
+
 						try {
-							dataUris = new Uri[] { Uri.parse(intent.getDataString()) };
+							if (intent.getDataString() != null) {
+								dataUris = new Uri[] { Uri.parse(intent.getDataString()) };
+							}
+							else {
+								if (Build.VERSION.SDK_INT >= 16) {
+									if (intent.getClipData() != null) {
+										final int numSelectedFiles = intent.getClipData().getItemCount();
+
+										dataUris = new Uri[numSelectedFiles];
+
+										for (int i = 0; i < numSelectedFiles; i++) {
+											dataUris[i] = intent.getClipData().getItemAt(i).getUri();
+										}
+									}
+								}
+							}
 						}
-						catch (Exception e) {
-							dataUris = null;
-						}
+						catch (Exception ignored) { }
 
 						mFileUploadCallbackSecond.onReceiveValue(dataUris);
 						mFileUploadCallbackSecond = null;
@@ -685,14 +699,22 @@ public class AdvancedWebView extends WebView {
 			// file upload callback (Android 4.1 (API level 16) -- Android 4.3 (API level 18)) (hidden method)
 			@SuppressWarnings("unused")
 			public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-				openFileInput(uploadMsg, null);
+				openFileInput(uploadMsg, null, false);
 			}
 
 			// file upload callback (Android 5.0 (API level 21) -- current) (public method)
 			@SuppressWarnings("all")
 			public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
-				openFileInput(null, filePathCallback);
-				return true;
+				if (Build.VERSION.SDK_INT >= 21) {
+					final boolean allowMultiple = fileChooserParams.getMode() == FileChooserParams.MODE_OPEN_MULTIPLE;
+
+					openFileInput(null, filePathCallback, allowMultiple);
+
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 
 			@Override
@@ -1124,7 +1146,7 @@ public class AdvancedWebView extends WebView {
 	}
 
 	@SuppressLint("NewApi")
-	protected void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond) {
+	protected void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond, final boolean allowMultiple) {
 		if (mFileUploadCallbackFirst != null) {
 			mFileUploadCallbackFirst.onReceiveValue(null);
 		}
@@ -1137,6 +1159,13 @@ public class AdvancedWebView extends WebView {
 
 		Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 		i.addCategory(Intent.CATEGORY_OPENABLE);
+
+		if (allowMultiple) {
+			if (Build.VERSION.SDK_INT >= 18) {
+				i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+			}
+		}
+
 		i.setType(mUploadableFileTypes);
 
 		if (mFragment != null && mFragment.get() != null && Build.VERSION.SDK_INT >= 11) {

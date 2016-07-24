@@ -235,6 +235,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
  * Optimized for best performance and security
  * Features are patched across Android versions
  * File uploads are handled automatically (check availability with `AdvancedWebView.isFileUploadAvailable()`)
+   * Multiple file uploads via single input fields (`multiple` attribute in HTML) are supported on Android 5.0+. The application that is used to pick the files (i.e. usually a gallery or file manager app) must provide controls for selecting multiple files, which some apps don't.
  * JavaScript and WebStorage are enabled by default
  * Includes localizations for the 25 most widely spoken languages
  * Receive callbacks when pages start/finish loading or have errors
