@@ -1106,7 +1106,11 @@ public class AdvancedWebView extends WebView {
 		}
 	}
 
-	/** Provides localizations for the 25 most widely spoken languages that have a ISO 639-2/T code */
+	/**
+	 * Provides localizations for the 25 most widely spoken languages that have a ISO 639-2/T code
+	 *
+	 * @return the label for the file upload prompts as a string
+	 */
 	protected String getFileUploadPromptLabel() {
 		try {
 			if (mLanguageIso3.equals("zho")) return decodeBase64("6YCJ5oup5LiA5Liq5paH5Lu2");
