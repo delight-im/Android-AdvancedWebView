@@ -233,15 +233,19 @@ public class AdvancedWebView extends WebView {
 		if (Build.VERSION.SDK_INT >= 11) {
 			super.onResume();
 		}
-		resumeTimers();
+		else {
+			resumeTimers();
+		}
 	}
 
 	@SuppressLint("NewApi")
 	@SuppressWarnings("all")
 	public void onPause() {
-		pauseTimers();
 		if (Build.VERSION.SDK_INT >= 11) {
 			super.onPause();
+		}
+		else {
+			pauseTimers();
 		}
 	}
 
