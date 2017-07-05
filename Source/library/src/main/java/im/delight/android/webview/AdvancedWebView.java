@@ -1219,6 +1219,7 @@ public class AdvancedWebView extends WebView {
 	 * @param fromUrl the URL of the file to download, e.g. the one from `AdvancedWebView.onDownloadRequested(...)`
 	 * @param toFilename the name of the destination file where the download should be saved, e.g. `myImage.jpg`
 	 * @return whether the download has been successfully handled or not
+	 * @throws IllegalStateException if the storage or the target directory could not be found or accessed
 	 */
 	@SuppressLint("NewApi")
 	public static boolean handleDownload(final Context context, final String fromUrl, final String toFilename) {
