@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
