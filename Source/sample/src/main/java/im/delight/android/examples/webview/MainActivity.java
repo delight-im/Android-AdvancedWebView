@@ -19,9 +19,16 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		// Remove title bar
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// Set window fullscreen
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
 		mWebView = (AdvancedWebView) findViewById(R.id.webview);
 		mWebView.setListener(this, this);
 		mWebView.setGeolocationEnabled(false);
