@@ -92,6 +92,7 @@ public class AdvancedWebView extends WebView {
 	protected boolean mGeolocationEnabled;
 	protected String mUploadableFileTypes = "*/*";
 	protected final Map<String, String> mHttpHeaders = new HashMap<String, String>();
+	private boolean zoomPickerEnabled = true;
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -1027,6 +1028,15 @@ public class AdvancedWebView extends WebView {
 		else {
 			super.loadUrl(url);
 		}
+	}
+
+	@Override
+	public void invokeZoomPicker() {
+		if(zoomPickerEnabled) super.invokeZoomPicker();
+	}
+
+	public void setZoomPickerEnabled(boolean zoomPickerEnabled) {
+		this.zoomPickerEnabled = zoomPickerEnabled;
 	}
 
 	public void loadUrl(String url, final boolean preventCaching) {
