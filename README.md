@@ -60,6 +60,17 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        
+        mWebView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                Log.d("scrollX", String.valueOf(i))
+                Log.d("scrollY", String.valueOf(i1))
+                Log.d("oldScrollX", String.valueOf(i2))
+                Log.d("oldScrollY", String.valueOf(i3))
+            }
+        });
+        
         mWebView.loadUrl("http://www.example.org/");
 
         // ...
@@ -137,6 +148,17 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        
+        mWebView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                Log.d("scrollX", String.valueOf(i))
+                Log.d("scrollY", String.valueOf(i1))
+                Log.d("oldScrollX", String.valueOf(i2))
+                Log.d("oldScrollY", String.valueOf(i3))
+            }
+        });
+        
         mWebView.loadUrl("http://www.example.org/");
 
         // ...
