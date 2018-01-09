@@ -340,7 +340,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    // mWebView.setDesktopMode(false);
    ```
 
- * Load HTML file from "assets" (e.g. at `app/src/main/assets/html/index.html`)
+ * Load HTML file from “assets” (e.g. at `app/src/main/assets/html/index.html`)
 
    ```java
    mWebView.loadUrl("file:///android_asset/html/index.html");
