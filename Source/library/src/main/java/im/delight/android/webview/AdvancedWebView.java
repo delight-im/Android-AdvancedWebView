@@ -69,6 +69,10 @@ public class AdvancedWebView extends WebView {
 		void onExternalPageRequest(String url);
 	}
 
+	public interface DownloadManagerRequestConfigurator {
+		void configure(Request request);
+	}
+
 	public static final String PACKAGE_NAME_DOWNLOAD_MANAGER = "com.android.providers.downloads";
 	protected static final int REQUEST_CODE_FILE_PICKER = 51426;
 	protected static final String DATABASES_SUB_FOLDER = "/databases";
@@ -1221,8 +1225,26 @@ public class AdvancedWebView extends WebView {
 	 * @return whether the download has been successfully handled or not
 	 * @throws IllegalStateException if the storage or the target directory could not be found or accessed
 	 */
-	@SuppressLint("NewApi")
 	public static boolean handleDownload(final Context context, final String fromUrl, final String toFilename) {
+		return handleDownload(context, fromUrl, toFilename, null);
+	}
+
+	/**
+	 * Handles a download by loading the file from `fromUrl` and saving it to `toFilename` on the external storage
+	 *
+	 * This requires the two permissions `android.permission.INTERNET` and `android.permission.WRITE_EXTERNAL_STORAGE`
+	 *
+	 * Only supported on API level 9 (Android 2.3) and above
+	 *
+	 * @param context a valid `Context` reference
+	 * @param fromUrl the URL of the file to download, e.g. the one from `AdvancedWebView.onDownloadRequested(...)`
+	 * @param toFilename the name of the destination file where the download should be saved, e.g. `myImage.jpg`
+	 * @param requestConfigurator the callback that is used to configure the request with custom options
+	 * @return whether the download has been successfully handled or not
+	 * @throws IllegalStateException if the storage or the target directory could not be found or accessed
+	 */
+	@SuppressLint("NewApi")
+	public static boolean handleDownload(final Context context, final String fromUrl, final String toFilename, final DownloadManagerRequestConfigurator requestConfigurator) {
 		if (Build.VERSION.SDK_INT < 9) {
 			throw new RuntimeException("Method requires API level 9 or above");
 		}
@@ -1233,6 +1255,10 @@ public class AdvancedWebView extends WebView {
 			request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 		}
 		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, toFilename);
+
+		if (requestConfigurator != null) {
+			requestConfigurator.configure(request);
+		}
 
 		final DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 		try {

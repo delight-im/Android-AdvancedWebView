@@ -275,6 +275,18 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    }
    ```
 
+   If you want to customize the request and configure it with your own options, just add the following callback as the fourth parameter to the `AdvancedWebView.handleDownload` method:
+
+   ```java
+   new AdvancedWebView.DownloadManagerRequestConfigurator() {
+
+       public void configure(final DownloadManager.Request request) {
+           // optionally configure the request instance here
+       }
+
+   }
+   ```
+
  * Enable geolocation support (needs `<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />`)
 
    ```java

@@ -105,7 +105,13 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
 		Toast.makeText(MainActivity.this, "onDownloadRequested(url = "+url+",  suggestedFilename = "+suggestedFilename+",  mimeType = "+mimeType+",  contentLength = "+contentLength+",  contentDisposition = "+contentDisposition+",  userAgent = "+userAgent+")", Toast.LENGTH_LONG).show();
 
-		/*if (AdvancedWebView.handleDownload(this, url, suggestedFilename)) {
+		/*if (AdvancedWebView.handleDownload(this, url, suggestedFilename, new AdvancedWebView.DownloadManagerRequestConfigurator() {
+
+			public void configure(final DownloadManager.Request request) {
+				// optionally configure the request instance here
+			}
+
+		})) {
 			// download successfully handled
 		}
 		else {
