@@ -346,6 +346,17 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    mWebView.loadUrl("file:///android_asset/html/index.html");
    ```
 
+ * Load HTML file from SD card
+
+   ```java
+   // <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+   if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+       mWebView.getSettings().setAllowFileAccess(true);
+       mWebView.loadUrl("file:///sdcard/Android/data/com.my.app/my_folder/index.html");
+   }
+   ```
+
  * Load HTML source text and display as page
 
    ```java
