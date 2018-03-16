@@ -32,7 +32,7 @@ import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.PermissionRequest;
 import android.webkit.WebStorage.QuotaUpdater;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.os.Build;
 import android.webkit.DownloadListener;
