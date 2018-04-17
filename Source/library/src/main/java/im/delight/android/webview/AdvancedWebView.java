@@ -502,8 +502,7 @@ public class AdvancedWebView extends WebView {
 
 			@Override
 			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-				// if the hostname may not be accessed
-				if (!isHostnameAllowed(url)) {
+				if (!isPermittedUrl(url)) {
 					// if a listener is available
 					if (mListener != null) {
 						// inform the listener about the request
@@ -1066,7 +1065,7 @@ public class AdvancedWebView extends WebView {
 		return unique.toString();
 	}
 
-	protected boolean isHostnameAllowed(final String url) {
+	protected boolean isPermittedUrl(final String url) {
 		// if the permitted hostnames have not been restricted to a specific set
 		if (mPermittedHostnames.size() == 0) {
 			// all hostnames are allowed
