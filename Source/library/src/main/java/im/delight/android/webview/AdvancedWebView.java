@@ -1075,6 +1075,11 @@ public class AdvancedWebView extends WebView {
 		// get the actual hostname of the URL that is to be checked
 		final String actualHost = Uri.parse(url).getHost();
 
+		// if the hostname could not be determined, usually because the URL has been invalid
+		if (actualHost == null) {
+			return false;
+		}
+
 		// for every hostname in the set of permitted hosts
 		for (String expectedHost : mPermittedHostnames) {
 			// if the two hostnames match or if the actual host is a subdomain of the expected host
