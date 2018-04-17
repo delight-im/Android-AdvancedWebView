@@ -1093,6 +1093,13 @@ public class AdvancedWebView extends WebView {
 		return false;
 	}
 
+	/**
+	 * @deprecated use `isPermittedUrl` instead
+	 */
+	protected boolean isHostnameAllowed(final String url) {
+		return isPermittedUrl(url);
+	}
+
 	protected void setLastError() {
 		mLastError = System.currentTimeMillis();
 	}
