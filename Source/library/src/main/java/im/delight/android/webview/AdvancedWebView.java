@@ -1079,7 +1079,7 @@ public class AdvancedWebView extends WebView {
 		// for every hostname in the set of permitted hosts
 		for (String expectedHost : mPermittedHostnames) {
 			// if the two hostnames match or if the actual host is a subdomain of the expected host
-			if (actualHost.equals(expectedHost) || actualHost.endsWith("."+expectedHost)) {
+			if (actualHost.equals(expectedHost) || actualHost.endsWith("." + expectedHost)) {
 				// the actual hostname of the URL to be checked is allowed
 				return true;
 			}
