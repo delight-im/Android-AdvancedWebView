@@ -1065,7 +1065,7 @@ public class AdvancedWebView extends WebView {
 		return unique.toString();
 	}
 
-	protected boolean isPermittedUrl(final String url) {
+	public boolean isPermittedUrl(final String url) {
 		// if the permitted hostnames have not been restricted to a specific set
 		if (mPermittedHostnames.size() == 0) {
 			// all hostnames are allowed
