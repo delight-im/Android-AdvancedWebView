@@ -6,6 +6,7 @@ package im.delight.android.webview;
  * Licensed under the MIT License (https://opensource.org/licenses/MIT)
  */
 
+import android.content.ClipData;
 import android.view.ViewGroup;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
@@ -263,52 +264,51 @@ public class AdvancedWebView extends WebView {
 	}
 
 	public void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
-		if (requestCode == mRequestCodeFilePicker) {
-			if (resultCode == Activity.RESULT_OK) {
-				if (intent != null) {
-					if (mFileUploadCallbackFirst != null) {
-						mFileUploadCallbackFirst.onReceiveValue(intent.getData());
-						mFileUploadCallbackFirst = null;
-					}
-					else if (mFileUploadCallbackSecond != null) {
-						Uri[] dataUris = null;
-
-						try {
-							if (intent.getDataString() != null) {
-								dataUris = new Uri[] { Uri.parse(intent.getDataString()) };
-							}
-							else {
-								if (Build.VERSION.SDK_INT >= 16) {
-									if (intent.getClipData() != null) {
-										final int numSelectedFiles = intent.getClipData().getItemCount();
-
-										dataUris = new Uri[numSelectedFiles];
-
-										for (int i = 0; i < numSelectedFiles; i++) {
-											dataUris[i] = intent.getClipData().getItemAt(i).getUri();
-										}
-									}
-								}
-							}
-						}
-						catch (Exception ignored) { }
-
-						mFileUploadCallbackSecond.onReceiveValue(dataUris);
-						mFileUploadCallbackSecond = null;
-					}
-				}
-			}
-			else {
-				if (mFileUploadCallbackFirst != null) {
-					mFileUploadCallbackFirst.onReceiveValue(null);
-					mFileUploadCallbackFirst = null;
-				}
-				else if (mFileUploadCallbackSecond != null) {
-					mFileUploadCallbackSecond.onReceiveValue(null);
-					mFileUploadCallbackSecond = null;
-				}
-			}
+		if (requestCode != mRequestCodeFilePicker) {
+			return;
 		}
+		if (resultCode != Activity.RESULT_OK) {
+			if (mFileUploadCallbackFirst != null) {
+				mFileUploadCallbackFirst.onReceiveValue(null);
+				mFileUploadCallbackFirst = null;
+			} else if (mFileUploadCallbackSecond != null) {
+				mFileUploadCallbackSecond.onReceiveValue(null);
+				mFileUploadCallbackSecond = null;
+			}
+			return;
+		}
+		if (intent == null) {
+			return;
+		}
+		if (mFileUploadCallbackFirst != null && Build.VERSION.SDK_INT < 21) {
+			mFileUploadCallbackFirst.onReceiveValue(intent.getData());
+			mFileUploadCallbackFirst = null;
+			return;
+		}
+		if (mFileUploadCallbackSecond == null || Build.VERSION.SDK_INT < 21) {
+			return;
+		}
+		Uri[] dataUris = null;
+		try {
+			String dataString = intent.getDataString();
+			if (dataString != null) {
+				dataUris = new Uri[]{Uri.parse(dataString)};
+				mFileUploadCallbackSecond.onReceiveValue(dataUris);
+				mFileUploadCallbackSecond = null;
+				return;
+			}
+			ClipData clipData = intent.getClipData();
+			if (clipData != null) {
+				int numSelectedFiles = clipData.getItemCount();
+				dataUris = new Uri[numSelectedFiles];
+				for (int i = 0; i < numSelectedFiles; i++) {
+					dataUris[i] = clipData.getItemAt(i).getUri();
+				}
+			}
+		} catch (Exception ignored) {
+		}
+		mFileUploadCallbackSecond.onReceiveValue(dataUris);
+		mFileUploadCallbackSecond = null;
 	}
 
 	/**
