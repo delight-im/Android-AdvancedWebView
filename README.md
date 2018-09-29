@@ -14,8 +14,6 @@ Enhanced WebView component for Android that works as intended out of the box
     ```gradle
     allprojects {
         repositories {
-			jcenter()
-			google()
             maven { url "https://jitpack.io" }
         }
     }
