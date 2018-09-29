@@ -11,21 +11,23 @@ Enhanced WebView component for Android that works as intended out of the box
  * Add this library to your project
    * Declare the Gradle repository in your root `build.gradle`
 
-     ```gradle
-     allprojects {
-         repositories {
-             maven { url "https://jitpack.io" }
-         }
-     }
-     ```
+    ```gradle
+    allprojects {
+        repositories {
+			jcenter()
+			google()
+            maven { url "https://jitpack.io" }
+        }
+    }
+    ```
 
    * Declare the Gradle dependency in your app module's `build.gradle`
 
-     ```gradle
-     dependencies {
-         compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
-     }
-     ```
+    ```gradle
+    dependencies {
+        implementation 'com.github.delight-im:Android-AdvancedWebView:v3.1.3'
+    }
+    ```
 
 ## Usage
 
