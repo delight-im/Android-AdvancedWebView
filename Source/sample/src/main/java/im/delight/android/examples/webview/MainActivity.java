@@ -1,16 +1,17 @@
 package im.delight.android.examples.webview;
 
-import im.delight.android.webview.AdvancedWebView;
-import android.webkit.WebChromeClient;
-import android.widget.Toast;
-import android.webkit.WebView;
-import android.view.View;
-import android.webkit.WebViewClient;
-import android.graphics.Bitmap;
-import android.content.Intent;
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import im.delight.android.webview.AdvancedWebView;
 
 public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
@@ -22,7 +23,7 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mWebView = (AdvancedWebView) findViewById(R.id.webview);
+		mWebView = findViewById(R.id.webview);
 		mWebView.setListener(this, this);
 		mWebView.setGeolocationEnabled(false);
 		mWebView.setMixedContentAllowed(true);
@@ -81,7 +82,9 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
 	@Override
 	public void onBackPressed() {
-		if (!mWebView.onBackPressed()) { return; }
+		if (!mWebView.onBackPressed()) {
+			return;
+		}
 		// ...
 		super.onBackPressed();
 	}
@@ -98,12 +101,17 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
 	@Override
 	public void onPageError(int errorCode, String description, String failingUrl) {
-		Toast.makeText(MainActivity.this, "onPageError(errorCode = "+errorCode+",  description = "+description+",  failingUrl = "+failingUrl+")", Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainActivity.this, "onPageError(errorCode = " + errorCode +
+				",  description = " + description + ",  failingUrl = " + failingUrl + ")", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
-	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-		Toast.makeText(MainActivity.this, "onDownloadRequested(url = "+url+",  suggestedFilename = "+suggestedFilename+",  mimeType = "+mimeType+",  contentLength = "+contentLength+",  contentDisposition = "+contentDisposition+",  userAgent = "+userAgent+")", Toast.LENGTH_LONG).show();
+	public void onDownloadRequested(String url, String suggestedFilename, String mimeType,
+									long contentLength, String contentDisposition, String userAgent) {
+		Toast.makeText(MainActivity.this, "onDownloadRequested(url = " + url +
+				",  suggestedFilename = " + suggestedFilename + ",  mimeType = " + mimeType +
+				",  contentLength = " + contentLength + ",  contentDisposition = " + contentDisposition +
+				",  userAgent = " + userAgent + ")", Toast.LENGTH_LONG).show();
 
 		/*if (AdvancedWebView.handleDownload(this, url, suggestedFilename)) {
 			// download successfully handled
@@ -115,7 +123,7 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
 	@Override
 	public void onExternalPageRequest(String url) {
-		Toast.makeText(MainActivity.this, "onExternalPageRequest(url = "+url+")", Toast.LENGTH_SHORT).show();
+		Toast.makeText(MainActivity.this, "onExternalPageRequest(url = " + url + ")",
+				Toast.LENGTH_SHORT).show();
 	}
-
 }
