@@ -522,8 +522,14 @@ public class AdvancedWebView extends WebView {
 					}
 				}
 
-				// route the request through the custom URL loading method
-				view.loadUrl(url);
+				if (url.startsWith("mailto:")) {
+					getContext().startActivity(new Intent(Intent.ACTION_SENDTO, Uri.parse(url)));
+				} else if (url.startsWith("tel:")) {
+					getContext().startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
+				} else {
+					// route the request through the custom URL loading method
+					view.loadUrl(url);
+				}
 
 				// cancel the original request
 				return true;
