@@ -4,7 +4,15 @@ Enhanced WebView component for Android that works as intended out of the box
 
 ## Requirements
 
- * Android 2.2+
+ * Android SDK 14 (Ice Cream Sandwich (4.0.1 - 4.0.2))
+
+ * Compiling with Java 1.8 (add the following to your app module's build.gradle's ```android {}```)
+   * ```gradle
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_8
+         targetCompatibility JavaVersion.VERSION_1_8
+     }
+     ```
 
 ## Installation
 
@@ -23,7 +31,7 @@ Enhanced WebView component for Android that works as intended out of the box
 
      ```gradle
      dependencies {
-         compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
+         implementation 'com.github.delight-im:Android-AdvancedWebView:v3.1.3'
      }
      ```
 
@@ -56,16 +64,15 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my);
+        setContentView(R.layout.MY_ACTIVITY);
 
-        mWebView = (AdvancedWebView) findViewById(R.id.webview);
+        mWebView = findViewById(R.id.webview);
         mWebView.setListener(this, this);
-        mWebView.loadUrl("http://www.example.org/");
+        mWebView.loadUrl("https://www.example.org/");
 
         // ...
     }
 
-    @SuppressLint("NewApi")
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,7 +80,6 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
         // ...
     }
 
-    @SuppressLint("NewApi")
     @Override
     protected void onPause() {
         mWebView.onPause();
@@ -97,26 +103,32 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
     @Override
     public void onBackPressed() {
-        if (!mWebView.onBackPressed()) { return; }
+        if (!mWebView.onBackPressed()) {
+            return;
+        }
         // ...
         super.onBackPressed();
     }
 
     @Override
-    public void onPageStarted(String url, Bitmap favicon) { }
+    public void onPageStarted(String url, Bitmap favicon) {
+    }
 
     @Override
-    public void onPageFinished(String url) { }
+    public void onPageFinished(String url) {
+    }
 
     @Override
-    public void onPageError(int errorCode, String description, String failingUrl) { }
+    public void onPageError(int errorCode, String description, String failingUrl) {
+    }
 
     @Override
-    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }
+    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
+    }
 
     @Override
-    public void onExternalPageRequest(String url) { }
-
+    public void onExternalPageRequest(String url) {
+    }
 }
 ```
 
@@ -129,22 +141,21 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
     private AdvancedWebView mWebView;
 
-    public MyFragment() { }
+    public MyFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my, container, false);
 
-        mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
+        mWebView = rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
-        mWebView.loadUrl("http://www.example.org/");
-
+        mWebView.loadUrl("https://www.example.org/");
         // ...
 
         return rootView;
     }
 
-    @SuppressLint("NewApi")
     @Override
     public void onResume() {
         super.onResume();
@@ -152,7 +163,6 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
         // ...
     }
 
-    @SuppressLint("NewApi")
     @Override
     public void onPause() {
         mWebView.onPause();
@@ -175,20 +185,24 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
     }
 
     @Override
-    public void onPageStarted(String url, Bitmap favicon) { }
+    public void onPageStarted(String url, Bitmap favicon) {
+    }
 
     @Override
-    public void onPageFinished(String url) { }
+    public void onPageFinished(String url) {
+    }
 
     @Override
-    public void onPageError(int errorCode, String description, String failingUrl) { }
+    public void onPageError(int errorCode, String description, String failingUrl) {
+    }
 
     @Override
-    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) { }
+    public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
+    }
 
     @Override
-    public void onExternalPageRequest(String url) { }
-
+    public void onExternalPageRequest(String url) {
+    }
 }
 ```
 
@@ -212,14 +226,13 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    ```java
    public class MyActivity extends FragmentActivity implements AdvancedWebView.Listener {
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (mFragment != null) {
-            mFragment.onActivityResult(requestCode, resultCode, intent);
-        }
-    }
-
+       @Override
+       public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+           super.onActivityResult(requestCode, resultCode, intent);
+           if (mFragment != null) {
+               mFragment.onActivityResult(requestCode, resultCode, intent);
+           }
+       }
    }
    ```
 
@@ -313,7 +326,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    ```java
    if (AdvancedWebView.Browsers.hasAlternative(this)) {
-       AdvancedWebView.Browsers.openUrl(this, "http://www.example.org/");
+       AdvancedWebView.Browsers.openUrl(this, "https://www.example.org/");
    }
    ```
 
@@ -353,7 +366,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
        mWebView.getSettings().setAllowFileAccess(true);
-       mWebView.loadUrl("file:///sdcard/Android/data/com.my.app/my_folder/index.html");
+       mWebView.loadUrl(Environment.getExternalStorageDirectory().getPath());
    }
    ```
 
@@ -364,7 +377,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
    // or
 
-   final String myBaseUrl = "http://www.example.com/";
+   final String myBaseUrl = "https://www.example.com/";
    myWebView.loadHtml("<html>...</html>", myBaseUrl);
    ```
 
@@ -375,25 +388,24 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    // myWebView.getSettings().setJavaScriptEnabled(true);
    // myWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-   myWebView.setWebChromeClient(new WebChromeClient() {
+   mWebView.setWebChromeClient(new WebChromeClient() {
 
        @Override
        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-           AdvancedWebView newWebView = new AdvancedWebView(MyNewActivity.this);
+           AdvancedWebView newWebView = new AdvancedWebView(MY_NEW_ACTIVITY.this);
            // myParentLayout.addView(newWebView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-           WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+           WebViewTransport transport = (WebViewTransport) resultMsg.obj;
            transport.setWebView(newWebView);
            resultMsg.sendToTarget();
 
            return true;
        }
-
-   }
+   });
    ```
 
 ## Contributing
 
-All contributions are welcome! If you wish to contribute, please create an issue first so that your feature, problem or question can be discussed.
+All contributions are welcome! If you wish to contribute, please create an issue first so that your feature, problem, or question can be discussed.
 
 ## License
 
