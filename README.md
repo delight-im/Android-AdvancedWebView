@@ -388,7 +388,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
    // myWebView.getSettings().setJavaScriptEnabled(true);
    // myWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-   mWebView.setWebChromeClient(new WebChromeClient() {
+   myWebView.setWebChromeClient(new WebChromeClient() {
 
        @Override
        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
