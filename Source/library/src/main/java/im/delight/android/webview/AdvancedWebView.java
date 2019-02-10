@@ -6,6 +6,8 @@ package im.delight.android.webview;
  * Licensed under the MIT License (https://opensource.org/licenses/MIT)
  */
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.view.ViewGroup;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
@@ -24,6 +26,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebResourceError;
 import android.os.Message;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -499,6 +502,13 @@ public class AdvancedWebView extends WebView {
 					mCustomWebViewClient.onReceivedError(view, errorCode, description, failingUrl);
 				}
 			}
+			
+			@TargetApi(android.os.Build.VERSION_CODES.M)
+         		@Override
+            		public void onReceivedError(WebView view, WebResourceRequest req, WebResourceError rerr) {
+               		// Redirect to deprecated method, so you can use it in all SDK versions
+                	onReceivedError(view, rerr.getErrorCode(), rerr.getDescription().toString(), req.getUrl().toString());
+            		}
 
 			@Override
 			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
