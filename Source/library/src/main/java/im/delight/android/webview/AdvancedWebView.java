@@ -143,6 +143,34 @@ public class AdvancedWebView extends WebView {
 		mListener = listener;
 		mRequestCodeFilePicker = requestCodeFilePicker;
 	}
+	
+	@Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		if (onScrollChangeListener != null) {
+			onScrollChangeListener.onScrollChange(getContext(), l, t, oldl, oldt);
+		}
+	}
+
+	public void setOnScrollChangeListener(OnScrollChangeListener onScrollChangeListener) {
+		this.onScrollChangeListener = onScrollChangeListener;
+	}
+
+	public OnScrollChangeListener getOnScrollChangeListener() {
+		return onScrollChangeListener;
+	}
+
+	public interface OnScrollChangeListener {
+		/**
+		* Called when the scroll position of a view changes.
+		*  @param v          The view whose scroll position has changed.
+		* @param scrollX    Current horizontal scroll origin.
+		* @param scrollY    Current vertical scroll origin.
+		* @param oldScrollX Previous horizontal scroll origin.
+		* @param oldScrollY Previous vertical scroll origin.
+		*/
+		void onScrollChange(Context v, int scrollX, int scrollY, int oldScrollX, int oldScrollY);
+	}
 
 	@Override
 	public void setWebViewClient(final WebViewClient client) {
