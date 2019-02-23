@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Request;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -517,6 +518,47 @@ public class AdvancedWebView extends WebView {
 				if (mCustomWebViewClient != null) {
 					// if the user-specified handler asks to override the request
 					if (mCustomWebViewClient.shouldOverrideUrlLoading(view, url)) {
+						// cancel the original request
+						return true;
+					}
+				}
+
+				final Uri uri = Uri.parse(url);
+				final String scheme = uri.getScheme();
+
+				if (scheme != null) {
+					final Intent externalSchemeIntent;
+
+					if (scheme.equals("tel")) {
+						externalSchemeIntent = new Intent(Intent.ACTION_DIAL, uri);
+					}
+					else if (scheme.equals("sms")) {
+						externalSchemeIntent = new Intent(Intent.ACTION_SENDTO, uri);
+					}
+					else if (scheme.equals("mailto")) {
+						externalSchemeIntent = new Intent(Intent.ACTION_SENDTO, uri);
+					}
+					else if (scheme.equals("whatsapp")) {
+						externalSchemeIntent = new Intent(Intent.ACTION_SENDTO, uri);
+						externalSchemeIntent.setPackage("com.whatsapp");
+					}
+					else {
+						externalSchemeIntent = null;
+					}
+
+					if (externalSchemeIntent != null) {
+						externalSchemeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+						try {
+							if (mActivity != null && mActivity.get() != null) {
+								mActivity.get().startActivity(externalSchemeIntent);
+							}
+							else {
+								getContext().startActivity(externalSchemeIntent);
+							}
+						}
+						catch (ActivityNotFoundException ignored) {}
+
 						// cancel the original request
 						return true;
 					}

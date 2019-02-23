@@ -243,6 +243,10 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 -dontwarn im.delight.android.webview.**
 ```
 
+### Cleartext (non-HTTPS) traffic
+
+If you want to serve sites or just single resources over plain `http` instead of `https`, there’s usually nothing to do if you’re targeting Android 8.1 (API level 27) or earlier. On Android 9 (API level 28) and later, however, [cleartext support is disabled by default](https://developer.android.com/training/articles/security-config). You may have to set `android:usesCleartextTraffic="true"` on the `<application>` element in `AndroidManifest.xml` or provide a custom [network security configuration](https://developer.android.com/training/articles/security-config).
+
 ## Features
 
  * Optimized for best performance and security
