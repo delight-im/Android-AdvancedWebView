@@ -1220,7 +1220,7 @@ public class AdvancedWebView extends WebView {
 	}
 
 	@SuppressLint("NewApi")
-	protected void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond, final boolean allowMultiple) {
+	public void openFileInput(final ValueCallback<Uri> fileUploadCallbackFirst, final ValueCallback<Uri[]> fileUploadCallbackSecond, final boolean allowMultiple) {
 		if (mFileUploadCallbackFirst != null) {
 			mFileUploadCallbackFirst.onReceiveValue(null);
 		}
