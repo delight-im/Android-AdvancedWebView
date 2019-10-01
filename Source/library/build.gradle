@@ -1,40 +1,35 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+
+
 
 android {
-	compileSdkVersion 21
-	buildToolsVersion '26.0.2'
+    compileSdkVersion 29
 
-	defaultConfig {
-		minSdkVersion 8
-		targetSdkVersion 21
-	}
 
-	buildTypes {
-		release {
-			minifyEnabled false
-			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-		}
-	}
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 29
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+	implementation 'com.github.trantuananh1996:PdfViewPager:-SNAPSHOT'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 
-task sourcesJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier = 'sources'
+
 }
-
-task javadoc(type: Javadoc) {
-	failOnError false
-	source = android.sourceSets.main.java.sourceFiles
-	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadoc'
-	from javadoc.destinationDir
-}
-
-artifacts {
-	archives sourcesJar
-	archives javadocJar
+repositories {
+    mavenCentral()
 }

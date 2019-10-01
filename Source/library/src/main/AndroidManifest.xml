@@ -1,8 +1,16 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.delight.android.webview">
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="21" />
-    <application />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.advancewebview">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application android:allowBackup="true">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <activity
+            android:name=".WebViewActivity"
+            android:theme="@style/FullScreen" />
+    </application>
 </manifest>

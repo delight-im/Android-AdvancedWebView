@@ -1,0 +1,16 @@
+<resources>
+
+    <style name="FullScreen" parent="@style/Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!--<item name="android:windowFullscreen">true</item>-->
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="HorizontalProgressbar" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">10dip</item>
+        <item name="android:max">100</item>
+        <item name="android:progressDrawable">@drawable/bg_progressbar</item>
+    </style>
+</resources>
