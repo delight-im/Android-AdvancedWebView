@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.pdf.PdfRenderer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -40,13 +39,14 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import es.voghdev.pdfviewpager.library.RemotePDFViewPager;
-import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter;
+import es.voghdev.pdfviewpager.library.RemotePDFRecyclerView;
+import es.voghdev.pdfviewpager.library.adapter.PDFRecyclerAdapter;
 import es.voghdev.pdfviewpager.library.remote.DownloadFile;
 import es.voghdev.pdfviewpager.library.util.FileUtil;
 
@@ -347,11 +347,11 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		back.setAlpha(1f);
 		pdfViewPager.setVisibility(View.VISIBLE);
 		webView.setVisibility(View.GONE);
-		remotePDFViewPager = new VerticalViewPager(WebViewActivity.this, url, new DownloadFile.Listener() {
+		remotePDFViewPager = new RemotePDFRecyclerView(WebViewActivity.this, url, new DownloadFile.Listener() {
 			@Override
 			public void onSuccess(String url, String destinationPath) {
-				PDFPagerAdapter adapter;
-				adapter = new PDFPagerAdapter(WebViewActivity.this, FileUtil.extractFileNameFromURL(url));
+				PDFRecyclerAdapter adapter;
+				adapter = new PDFRecyclerAdapter(WebViewActivity.this, FileUtil.extractFileNameFromURL(url));
 				remotePDFViewPager.setAdapter(adapter);
 				pdfViewPager.removeAllViews();
 				pdfViewPager.addView(remotePDFViewPager);
@@ -373,6 +373,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 				Log.e("Progress", progress + "/" + total);
 			}
 		});
+		remotePDFViewPager.setLayoutManager(new LinearLayoutManager(this));
 	}
 
 	@Override
@@ -442,7 +443,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		super.onBackPressed();
 	}
 
-	RemotePDFViewPager remotePDFViewPager;
+	RemotePDFRecyclerView remotePDFViewPager;
 
 	public void LoadWebViewUrl(String url) {
 		isPdfShowing = false;

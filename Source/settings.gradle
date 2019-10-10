@@ -1,2 +1,5 @@
 include ':library'
 include ':sample'
+include ':pdfView'
+project(':pdfView').projectDir = new File('C:\\Users\\trant\\Documents\\Github\\PdfViewPager\\library')
+
