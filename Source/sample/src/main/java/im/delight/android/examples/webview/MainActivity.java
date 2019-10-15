@@ -12,6 +12,11 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.app.Activity;
 
+import com.advancewebview.HeaderObj;
+import com.advancewebview.WebViewActivity;
+
+import java.util.ArrayList;
+
 public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
 	private static final String TEST_PAGE_URL = "https://www.example.org/";
@@ -47,6 +52,12 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 		});
 		mWebView.addHttpHeader("X-Requested-With", "");
 		mWebView.loadUrl(TEST_PAGE_URL);
+//		ArrayList<HeaderObj> headerObjs = new ArrayList<>();
+//		headerObjs.add(new HeaderObj("Authorization",""));
+//		Intent intent = new Intent(this,TestActivity.class);
+//		intent.putExtra("url","");
+//		intent.putParcelableArrayListExtra(WebViewActivity.KEY_HEADER_DATA, headerObjs);
+//		startActivity(intent);
 	}
 
 	@SuppressLint("NewApi")

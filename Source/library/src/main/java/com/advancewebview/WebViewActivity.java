@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Browser;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import es.voghdev.pdfviewpager.library.RemotePDFRecyclerView;
@@ -57,11 +59,13 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	private View webViewActionBar;
 	private static String webViewUrl = "http://google.com";
 	public static final String KEY_URL = "url";
+	public static final String KEY_HEADER_DATA = "header";
 	protected TextView tvTitle;
 	protected ConstraintLayout llBottoms;
 	private boolean canGoBack = true;
 	LinearLayout pdfViewPager;
 	boolean isPdfShowing = false;
+	private List<HeaderObj> headerObjects;
 
 	public void setCanGoBack(boolean canGoBack) {
 		this.canGoBack = canGoBack;
@@ -69,8 +73,10 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (getIntent().getExtras() != null)
+		if (getIntent().getExtras() != null) {
 			webViewUrl = getIntent().getExtras().getString(KEY_URL);
+			headerObjects = getIntent().getExtras().getParcelableArrayList(KEY_HEADER_DATA);
+		}
 		if (webViewUrl == null) webViewUrl = "";
 		Log.e("Webview url", webViewUrl);
 		super.onCreate(savedInstanceState);
@@ -174,6 +180,13 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 					if (webView.getUrl() != null) {
 						try {
 							Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl()));
+							if (headerObjects != null) {
+								Bundle bundle = new Bundle();
+								for (HeaderObj headerObj : headerObjects) {
+									bundle.putString(headerObj.getHeaderName(), headerObj.getHeaderData());
+								}
+								browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+							}
 							startActivity(browserIntent);
 						} catch (ActivityNotFoundException e) {
 							Toast.makeText(WebViewActivity.this, "Thiết bị không có trình duyệt", Toast.LENGTH_SHORT).show();
@@ -449,10 +462,16 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		isPdfShowing = false;
 		pdfViewPager.setVisibility(View.GONE);
 		webView.setVisibility(View.VISIBLE);
+		HashMap<String, String> headers = new HashMap<>();
+		if (headerObjects != null) {
+			for (HeaderObj headerObject : headerObjects) {
+				headers.put(headerObject.getHeaderName(), headerObject.getHeaderData());
+			}
+		}
 		// Log.d(getClass().getSimpleName(), "LoadWebViewUrl() called with: url = [" + url + "]");
 		if (TextUtils.isEmpty(url)) return;
 		if (isInternetConnected())
-			webView.loadUrl(checkUrl(url), false);
+			webView.loadUrl(checkUrl(url), false, headers);
 		else {
 			Toast.makeText(WebViewActivity.this, "Oops!! There is no internet connection. Please enable your internet connection.", Toast.LENGTH_LONG).show();
 		}
