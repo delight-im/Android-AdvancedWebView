@@ -331,6 +331,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		if (extension != null) {
 			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 		}
+		if(type==null) type="";
 		return type;
 	}
 
