@@ -89,6 +89,11 @@ public class AdvancedWebView extends LollipopFixedWebView {
                 || mimeType.equals(xlsMime);
 
     }
+    public static boolean isPdf(String mimeType) {
+        String pdf = "application/pdf";
+        return mimeType.equals(pdf);
+
+    }
 
     public interface Listener {
         void onPageStarted(String url, Bitmap favicon);

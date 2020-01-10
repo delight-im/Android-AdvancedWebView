@@ -25,10 +25,10 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-	implementation 'com.github.trantuananh1996:PdfViewPager:1.0.0'
+//	implementation 'com.github.trantuananh1996:PdfViewPager:1.0.0'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 //	implementation project(path: ':webView')
-
+	implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
 
 }
 repositories {

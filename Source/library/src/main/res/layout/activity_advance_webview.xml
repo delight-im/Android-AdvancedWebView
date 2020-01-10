@@ -1,153 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/webview_actionbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:minHeight="?attr/actionBarSize">
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/webview_actionbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="#ffffff"
+		android:minHeight="?attr/actionBarSize">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/webviewBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:background="@drawable/imageview_selector"
-            android:padding="5dp"
-            android:rotation="180"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/webviewForward"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_forward"
-            app:tint="#000000" />
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/webviewBack"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_margin="5dp"
+			android:background="@drawable/imageview_selector"
+			android:padding="5dp"
+			android:rotation="180"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/webviewForward"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_forward"
+			app:tint="#000000" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/webviewForward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:background="@drawable/imageview_selector"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/webviewMenu"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_forward"
-            app:tint="#000000" />
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/webviewForward"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_margin="5dp"
+			android:background="@drawable/imageview_selector"
+			android:padding="5dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/webviewMenu"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_forward"
+			app:tint="#000000" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/webviewMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:background="@drawable/imageview_selector"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_menu_dot_vertical"
-            app:tint="#000000" />
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/webviewMenu"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_margin="5dp"
+			android:background="@drawable/imageview_selector"
+			android:padding="5dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_menu_dot_vertical"
+			app:tint="#000000" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:ellipsize="end"
-            android:lines="1"
-            android:padding="5dp"
-            android:textColor="#2196F3"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/webviewReload"
-            app:layout_constraintStart_toEndOf="@+id/webviewClose"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="ANDROHUB" />
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:ellipsize="end"
+			android:lines="1"
+			android:padding="5dp"
+			android:textColor="#2196F3"
+			android:textSize="16sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/webviewReload"
+			app:layout_constraintStart_toEndOf="@+id/webviewClose"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="ANDROHUB" />
 
-        <ImageView
-            android:id="@+id/webviewReload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:layout_toLeftOf="@+id/webviewClose"
-            android:background="@drawable/imageview_selector"
-            android:padding="5dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/webviewBack"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_refresh"
-            app:tint="#000000" />
+		<ImageView
+			android:id="@+id/webviewReload"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_margin="5dp"
+			android:layout_toLeftOf="@+id/webviewClose"
+			android:background="@drawable/imageview_selector"
+			android:padding="5dp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/webviewBack"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_refresh"
+			app:tint="#000000" />
 
-        <ProgressBar
-            android:id="@+id/webViewProgressBar"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="end"
-            android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/webviewClose"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/webviewBack"
-            app:layout_constraintTop_toTopOf="parent" />
+		<ProgressBar
+			android:id="@+id/webViewProgressBar"
+			android:layout_width="23dp"
+			android:layout_height="23dp"
+			android:layout_centerVertical="true"
+			android:layout_gravity="end"
+			android:layout_margin="10dp"
+			android:layout_toLeftOf="@+id/webviewClose"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/webviewBack"
+			app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/webviewClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="5dp"
-            android:background="@drawable/imageview_selector"
-            android:padding="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close"
-            app:tint="#000000" />
+		<androidx.appcompat.widget.AppCompatImageView
+			android:id="@+id/webviewClose"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:layout_margin="5dp"
+			android:background="@drawable/imageview_selector"
+			android:padding="5dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/ic_close"
+			app:tint="#000000" />
 
-        <ProgressBar
-            android:id="@+id/horizontalProgress"
-            style="@style/HorizontalProgressbar"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+		<ProgressBar
+			android:id="@+id/horizontalProgress"
+			style="@style/HorizontalProgressbar"
+			android:layout_width="match_parent"
+			android:layout_height="4dp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#7e7e7e" />
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#7e7e7e" />
 
-    <com.advancewebview.AdvancedWebView
-        android:id="@+id/sitesWebView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+	<com.advancewebview.AdvancedWebView
+		android:id="@+id/sitesWebView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/pdf_page_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_bottoms"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="vertical"
-        android:visibility="gone" />
+	<com.github.barteksc.pdfviewer.PDFView
+		android:id="@+id/pdfView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/ll_bottoms"
+		android:layout_width="match_parent"
+		android:layout_height="45dp"
+		android:orientation="vertical"
+		android:visibility="gone" />
 </LinearLayout>

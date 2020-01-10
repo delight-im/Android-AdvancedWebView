@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -42,15 +43,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
+import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import es.voghdev.pdfviewpager.library.RemotePDFRecyclerView;
-import es.voghdev.pdfviewpager.library.adapter.PDFRecyclerAdapter;
-import es.voghdev.pdfviewpager.library.remote.DownloadFile;
-import es.voghdev.pdfviewpager.library.util.FileUtil;
+
+import static com.advancewebview.AdvancedWebView.isPdf;
 
 public class WebViewActivity extends AppCompatActivity implements View.OnClickListener, AdvancedWebView.Listener {
 	protected AdvancedWebView webView;
@@ -63,9 +67,9 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	protected TextView tvTitle;
 	protected ConstraintLayout llBottoms;
 	private boolean canGoBack = true;
-	LinearLayout pdfViewPager;
 	boolean isPdfShowing = false;
 	private List<HeaderObj> headerObjects;
+	PDFView pdfView;
 
 	public void setCanGoBack(boolean canGoBack) {
 		this.canGoBack = canGoBack;
@@ -105,8 +109,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		webView = findViewById(R.id.sitesWebView);
 		webView.setListener(this, this);
 		webViewActionBar = findViewById(R.id.webview_actionbar);
-		pdfViewPager = findViewById(R.id.pdf_page_container);
-		pdfViewPager.setVisibility(View.GONE);
+		pdfView = findViewById(R.id.pdfView);
+		pdfView.setVisibility(View.GONE);
 	}
 
 
@@ -261,12 +265,42 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
 
 	private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
-		if (attachmentUri != null) {
-			if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme()) && attachmentUri.getPath() != null) {
-				File file = new File(attachmentUri.getPath());
-				FileOpen.openFile(context, file, mimeType);
+		if (isPdf(mimeType)) showPdf(attachmentUri);
+		else {
+			if (attachmentUri != null) {
+				if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme()) && attachmentUri.getPath() != null) {
+					File file = new File(attachmentUri.getPath());
+					FileOpen.openFile(context, file, mimeType);
+				}
 			}
 		}
+	}
+
+	private void showPdf(Uri attachmentUri) {
+		pdfView.setVisibility(View.VISIBLE);
+		webView.setVisibility(View.GONE);
+
+		pdfView.fromUri(attachmentUri)
+			.defaultPage(0)
+			.enableSwipe(true)
+			.swipeHorizontal(false)
+			.onPageChange(new OnPageChangeListener() {
+				@Override
+				public void onPageChanged(int page, int pageCount) {
+
+				}
+			})
+			.enableAnnotationRendering(true)
+			.onLoad(new OnLoadCompleteListener() {
+				@Override
+				public void loadComplete(int nbPages) {
+					back.setAlpha(1f);
+					horizontalProgress.setVisibility(View.GONE);
+					isPdfShowing = true;
+				}
+			})
+			.scrollHandle(new DefaultScrollHandle(this))
+			.load();
 	}
 
 	public static final String[] PERMISSIONS_STORAGE = {
@@ -290,15 +324,27 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		} else return true;
 	}
 
+	// url = file path or whatever suitable URL you want.
+	public static String getMimeType(String url) {
+		String type = null;
+		String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+		if (extension != null) {
+			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+		}
+		return type;
+	}
+
 	@Override
 	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-		if ("application/pdf".equals(mimeType)) {
-			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-				showPdf(url);
-			} else {
-				if (!verifyStoragePermissions(this)) return;
+		if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType) || isPdf(mimeType)) {
+			if (!verifyStoragePermissions(this)) return;
 //            FileOpen.openFile(this, url,mimeType);
-
+			File file = new File(Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
+			if (file.exists() && getMimeType(file.getPath()).equals(mimeType)) {
+				Log.e("File", suggestedFilename);
+				showPdf(Uri.fromFile(file));
+			} else {
 				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 				request.setDescription("");
 				request.setTitle(suggestedFilename);
@@ -316,29 +362,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 					downloadID = manager.enqueue(request);
 				}
 			}
-		} else if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType)) {
-			if (!verifyStoragePermissions(this)) return;
-//            FileOpen.openFile(this, url,mimeType);
-
-			DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-			request.setDescription("");
-			request.setTitle(suggestedFilename);
-			request.allowScanningByMediaScanner();
-			request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
-				DownloadManager.Request.NETWORK_MOBILE)
-				.setAllowedOverRoaming(false);
-			request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, suggestedFilename);
-			DownloadManager manager = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
-			if (manager != null) {
-
-				fileName = suggestedFilename;
-				this.mimeType = mimeType;
-				downloadID = manager.enqueue(request);
-			}
-
 		} else {
-			pdfViewPager.setVisibility(View.GONE);
+			pdfView.setVisibility(View.GONE);
 			webView.setVisibility(View.VISIBLE);
 			// Log.d(getClass().getSimpleName(), "LoadWebViewUrl() called with: url = [" + url + "]");
 			if (TextUtils.isEmpty(url)) return;
@@ -356,38 +381,6 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 //        LoadWebViewUrl(url);
 	}
 
-	private void showPdf(String url) {
-		back.setAlpha(1f);
-		pdfViewPager.setVisibility(View.VISIBLE);
-		webView.setVisibility(View.GONE);
-		remotePDFViewPager = new RemotePDFRecyclerView(WebViewActivity.this, url, new DownloadFile.Listener() {
-			@Override
-			public void onSuccess(String url, String destinationPath) {
-				PDFRecyclerAdapter adapter;
-				adapter = new PDFRecyclerAdapter(WebViewActivity.this, FileUtil.extractFileNameFromURL(url));
-				remotePDFViewPager.setAdapter(adapter);
-				pdfViewPager.removeAllViews();
-				pdfViewPager.addView(remotePDFViewPager);
-				horizontalProgress.setVisibility(View.GONE);
-				isPdfShowing = true;
-//                    updateLayout();
-//                    showDownloadButton();
-			}
-
-			@Override
-			public void onFailure(Exception e) {
-				e.printStackTrace();
-			}
-
-			@Override
-			public void onProgressUpdate(int progress, int total) {
-				horizontalProgress.setMax(total);
-				horizontalProgress.setProgress(progress);
-				Log.e("Progress", progress + "/" + total);
-			}
-		});
-		remotePDFViewPager.setLayoutManager(new LinearLayoutManager(this));
-	}
 
 	@Override
 	public void onExternalPageRequest(String url) {
@@ -444,7 +437,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	public void onBackPressed() {
 		if (isPdfShowing) {
 			webView.setVisibility(View.VISIBLE);
-			pdfViewPager.setVisibility(View.GONE);
+			pdfView.setVisibility(View.GONE);
+			isPdfShowing = false;
 			if (webView.canGoBack()) back.setAlpha(1f);
 			else back.setAlpha(0.3f);
 			return;
@@ -456,11 +450,10 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		super.onBackPressed();
 	}
 
-	RemotePDFRecyclerView remotePDFViewPager;
 
 	public void LoadWebViewUrl(String url) {
 		isPdfShowing = false;
-		pdfViewPager.setVisibility(View.GONE);
+		pdfView.setVisibility(View.GONE);
 		webView.setVisibility(View.VISIBLE);
 		HashMap<String, String> headers = new HashMap<>();
 		if (headerObjects != null) {
