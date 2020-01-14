@@ -80,6 +80,7 @@ public class AdvancedWebView extends WebView {
 	protected WeakReference<Activity> mActivity;
 	protected WeakReference<Fragment> mFragment;
 	protected Listener mListener;
+	protected boolean mAllowSubdomains = true;
 	protected final List<String> mPermittedHostnames = new LinkedList<String>();
 	/** File upload callback for platform versions prior to Android 5.0 */
 	protected ValueCallback<Uri> mFileUploadCallbackFirst;
@@ -340,6 +341,14 @@ public class AdvancedWebView extends WebView {
 	public void removeHttpHeader(final String name) {
 		mHttpHeaders.remove(name);
 	}
+	
+	public void setAllowSubdomains(boolean b){
+		mAllowSubdomains = b;
+	}
+	
+	public boolean getAllowSubdomains(){
+		return mAllowSubdomains;
+	}
 
 	public void addPermittedHostname(String hostname) {
 		mPermittedHostnames.add(hostname);
@@ -503,7 +512,7 @@ public class AdvancedWebView extends WebView {
 
 			@Override
 			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-				if (!isPermittedUrl(url)) {
+				if (!isPermittedUrl(url, mAllowSubdomains)) {
 					// if a listener is available
 					if (mListener != null) {
 						// inform the listener about the request
