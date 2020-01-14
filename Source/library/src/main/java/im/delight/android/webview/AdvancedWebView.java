@@ -1106,8 +1106,12 @@ public class AdvancedWebView extends WebView {
 
 		return unique.toString();
 	}
-
+	
 	public boolean isPermittedUrl(final String url) {
+		isPermittedUrl(url, true)
+	}
+
+	public boolean isPermittedUrl(final String url, boolean allowSubdomains) {
 		// if the permitted hostnames have not been restricted to a specific set
 		if (mPermittedHostnames.size() == 0) {
 			// all hostnames are allowed
@@ -1142,7 +1146,7 @@ public class AdvancedWebView extends WebView {
 		// for every hostname in the set of permitted hosts
 		for (String expectedHost : mPermittedHostnames) {
 			// if the two hostnames match or if the actual host is a subdomain of the expected host
-			if (actualHost.equals(expectedHost) || actualHost.endsWith("." + expectedHost)) {
+			if (actualHost.equals(expectedHost) || (allowSubdomains && actualHost.endsWith("." + expectedHost))) {
 				// the actual hostname of the URL to be checked is allowed
 				return true;
 			}
