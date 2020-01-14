@@ -394,6 +394,13 @@ If you want to serve sites or just single resources over plain `http` instead of
 
    }
    ```
+   
+ * Stricter whitelist matching (allow only specified domains, without subdomains):
+ 
+ ```java
+ mWebView.addPermittedHostname("example.org"); // will match example.org, www.example.org, example2.example.org, etc.
+ mWebView.setAllowSubdomains(false);           // will only match example.org
+ ```
 
 ## Contributing
 
