@@ -1,6 +1,5 @@
 package im.delight.android.examples.webview;
 
-import im.delight.android.webview.AdvancedWebView;
 import android.webkit.WebChromeClient;
 import android.widget.Toast;
 import android.webkit.WebView;
@@ -12,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.app.Activity;
 
+import com.advancewebview.AdvancedWebView;
 import com.advancewebview.HeaderObj;
 import com.advancewebview.WebViewActivity;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
-	private static final String TEST_PAGE_URL = "https://www.example.org/";
+	private static final String TEST_PAGE_URL = "https://forms.gle/G4D9Ens23ragpYFk9";
 	private AdvancedWebView mWebView;
 
 	@Override
@@ -127,6 +127,21 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 	@Override
 	public void onExternalPageRequest(String url) {
 		Toast.makeText(MainActivity.this, "onExternalPageRequest(url = "+url+")", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onReceivedTitle(String title) {
+
+	}
+
+	@Override
+	public void onProgressChanged(int newProgress) {
+
+	}
+
+	@Override
+	public void onReceivedIcon(Bitmap icon) {
+
 	}
 
 }
