@@ -270,7 +270,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 			if (attachmentUri != null) {
 				if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme()) && attachmentUri.getPath() != null) {
 					File file = new File(attachmentUri.getPath());
-					FileOpen.openFile(context, file, attachmentMimeType);
+					FileOpen.openFile(getApplicationContext(), file, attachmentMimeType);
+					if (webView != null && !webView.canGoBack()) finish();
 				}
 			}
 		}

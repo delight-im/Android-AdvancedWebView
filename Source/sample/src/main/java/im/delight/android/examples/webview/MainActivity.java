@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends WebViewActivity implements AdvancedWebView.Listener {
 
-	private static final String TEST_PAGE_URL = "https://whoops.ko.edu.vn/student-message/get-attach-file/1134?updated";
+	private static final String TEST_PAGE_URL = "google.com";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
