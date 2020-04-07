@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -60,7 +61,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	private ProgressBar webViewProgressBar, horizontalProgress;
 	private ImageView back, forward, close, menu;
 	private View webViewActionBar;
-	private static String webViewUrl = "http://google.com";
+	protected static String webViewUrl = "http://google.com";
 	public static final String KEY_URL = "url";
 	public static final String KEY_HEADER_DATA = "header";
 	protected TextView tvTitle;
@@ -264,12 +265,12 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
 
 	private void openDownloadedAttachment(final Context context, Uri attachmentUri, final String attachmentMimeType) {
-		if (isPdf(mimeType)) showPdf(attachmentUri);
+		if (isPdf(attachmentMimeType)) showPdf(attachmentUri);
 		else {
 			if (attachmentUri != null) {
 				if (ContentResolver.SCHEME_FILE.equals(attachmentUri.getScheme()) && attachmentUri.getPath() != null) {
 					File file = new File(attachmentUri.getPath());
-					FileOpen.openFile(context, file, mimeType);
+					FileOpen.openFile(context, file, attachmentMimeType);
 				}
 			}
 		}
@@ -280,31 +281,31 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		webView.setVisibility(View.GONE);
 
 		pdfView.fromUri(attachmentUri)
-			.defaultPage(0)
-			.enableSwipe(true)
-			.swipeHorizontal(false)
-			.onPageChange(new OnPageChangeListener() {
-				@Override
-				public void onPageChanged(int page, int pageCount) {
+				.defaultPage(0)
+				.enableSwipe(true)
+				.swipeHorizontal(false)
+				.onPageChange(new OnPageChangeListener() {
+					@Override
+					public void onPageChanged(int page, int pageCount) {
 
-				}
-			})
-			.enableAnnotationRendering(true)
-			.onLoad(new OnLoadCompleteListener() {
-				@Override
-				public void loadComplete(int nbPages) {
-					back.setAlpha(1f);
-					horizontalProgress.setVisibility(View.GONE);
-					isPdfShowing = true;
-				}
-			})
-			.scrollHandle(new DefaultScrollHandle(this))
-			.load();
+					}
+				})
+				.enableAnnotationRendering(true)
+				.onLoad(new OnLoadCompleteListener() {
+					@Override
+					public void loadComplete(int nbPages) {
+						back.setAlpha(1f);
+						horizontalProgress.setVisibility(View.GONE);
+						isPdfShowing = true;
+					}
+				})
+				.scrollHandle(new DefaultScrollHandle(this))
+				.load();
 	}
 
 	public static final String[] PERMISSIONS_STORAGE = {
-		Manifest.permission.READ_EXTERNAL_STORAGE,
-		Manifest.permission.WRITE_EXTERNAL_STORAGE
+			Manifest.permission.READ_EXTERNAL_STORAGE,
+			Manifest.permission.WRITE_EXTERNAL_STORAGE
 	};
 	public static final int REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -315,12 +316,18 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		int permission1 = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
 		if (permission != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(
-				activity,
-				PERMISSIONS_STORAGE,
-				REQUEST_EXTERNAL_STORAGE
+					activity,
+					PERMISSIONS_STORAGE,
+					REQUEST_EXTERNAL_STORAGE
 			);
 			return false;
 		} else return true;
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		LoadWebViewUrl(webViewUrl);
 	}
 
 	// url = file path or whatever suitable URL you want.
@@ -330,7 +337,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		if (extension != null) {
 			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 		}
-		if(type==null) type="";
+		if (type == null) type = "";
 		return type;
 	}
 
@@ -340,18 +347,18 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 			if (!verifyStoragePermissions(this)) return;
 //            FileOpen.openFile(this, url,mimeType);
 			File file = new File(Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
+					Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
 			if (file.exists() && getMimeType(file.getPath()).equals(mimeType)) {
 				Log.e("File", suggestedFilename);
-				showPdf(Uri.fromFile(file));
+				openDownloadedAttachment(this, Uri.fromFile(file), mimeType);
 			} else {
 				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 				request.setDescription("");
 				request.setTitle(suggestedFilename);
 				request.allowScanningByMediaScanner();
 				request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
-					DownloadManager.Request.NETWORK_MOBILE)
-					.setAllowedOverRoaming(false);
+						DownloadManager.Request.NETWORK_MOBILE)
+						.setAllowedOverRoaming(false);
 				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, suggestedFilename);
 				DownloadManager manager = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
