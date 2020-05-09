@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="reload">Reload</string>
+	<string name="str_continue">Continue</string>
+	<string name="str_cancel">Cancel</string>
+	<string name="cert_error_title">SSL Certificate Error</string>
+	<string name="wanna_continue">Do you want to continue anyway?</string>
+	<string name="ssl_error_title">SSL Certificate error.</string>
+	<string name="ssl_untrusted">The certificate authority is not trusted.</string>
+	<string name="ssl_expired">The certificate has expired.</string>
+	<string name="ssl_idmismatch">The certificate Hostname mismatch.</string>
+	<string name="ssl_notyetvalid">The certificate is not yet valid.</string>
+	<string name="dont_have_browser">This device don\'t have any browser</string>
+</resources>

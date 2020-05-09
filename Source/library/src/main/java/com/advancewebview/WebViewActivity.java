@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -26,11 +27,11 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,14 +48,15 @@ import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.pr.swalert.SweetAlertDialog;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import static com.advancewebview.AdvancedWebView.isPdf;
+import static com.pr.swalert.SweetAlertDialog.AlertType.WARNING;
 
 public class WebViewActivity extends AppCompatActivity implements View.OnClickListener, AdvancedWebView.Listener {
 	protected AdvancedWebView webView;
@@ -70,6 +72,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	boolean isPdfShowing = false;
 	private List<HeaderObj> headerObjects;
 	PDFView pdfView;
+	private String urlPendingPermission = "";
 
 	public void setCanGoBack(boolean canGoBack) {
 		this.canGoBack = canGoBack;
@@ -124,6 +127,42 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 		webView.getSettings().setUseWideViewPort(true);
 		webView.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+				String message = getString(R.string.ssl_error_title);
+				switch (error.getPrimaryError()) {
+					case SslError.SSL_UNTRUSTED:
+						message = getString(R.string.ssl_untrusted);
+						break;
+					case SslError.SSL_EXPIRED:
+						message = getString(R.string.ssl_expired);
+						break;
+					case SslError.SSL_IDMISMATCH:
+						message = getString(R.string.ssl_idmismatch);
+						break;
+					case SslError.SSL_NOTYETVALID:
+						message = getString(R.string.ssl_notyetvalid);
+						break;
+				}
+				message += " " + getString(R.string.wanna_continue);
+				new SweetAlertDialog(WebViewActivity.this, WARNING)
+						.setTitleText(getString(R.string.cert_error_title))
+						.setContentText(message)
+						.showCancelButton(true)
+						.showConfirmButton(true)
+						.setCancelClickListener(sweetAlertDialog -> {
+							handler.cancel();
+							sweetAlertDialog.dismiss();
+						})
+						.setConfirmClickListener(sweetAlertDialog -> {
+							handler.proceed();
+							sweetAlertDialog.dismiss();
+						})
+						.setConfirmText(R.string.str_continue)
+						.setCancelText(R.string.str_cancel)
+						.show();
+			}
+
 			@Override
 			public void onLoadResource(WebView view, String url) {
 
@@ -193,7 +232,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 							}
 							startActivity(browserIntent);
 						} catch (ActivityNotFoundException e) {
-							Toast.makeText(WebViewActivity.this, "Thiết bị không có trình duyệt", Toast.LENGTH_SHORT).show();
+							Toast.makeText(WebViewActivity.this, R.string.dont_have_browser, Toast.LENGTH_SHORT).show();
 						}
 					}
 				} else if (item.getItemId() == R.id.reload) {
@@ -311,11 +350,12 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	public static final int REQUEST_EXTERNAL_STORAGE = 1;
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public static boolean verifyStoragePermissions(Activity activity) {
+	private boolean verifyStoragePermissions(Activity activity, String url) {
 		if (activity == null) return false;
 		int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 		int permission1 = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
 		if (permission != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED) {
+			urlPendingPermission = url;
 			ActivityCompat.requestPermissions(
 					activity,
 					PERMISSIONS_STORAGE,
@@ -328,7 +368,8 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		LoadWebViewUrl(webViewUrl);
+		if (!TextUtils.isEmpty(urlPendingPermission))
+			LoadWebViewUrl(urlPendingPermission);
 	}
 
 	// url = file path or whatever suitable URL you want.
@@ -345,7 +386,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	@Override
 	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
 		if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType) || isPdf(mimeType)) {
-			if (!verifyStoragePermissions(this)) return;
+			if (!verifyStoragePermissions(this, url)) return;
 //            FileOpen.openFile(this, url,mimeType);
 			File file = new File(Environment.getExternalStoragePublicDirectory(
 					Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
@@ -449,6 +490,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 			isPdfShowing = false;
 			if (webView.canGoBack()) back.setAlpha(1f);
 			else back.setAlpha(0.3f);
+			if (TextUtils.isEmpty(webView.getOriginalUrl())) super.onBackPressed();
 			return;
 		}
 		if (canGoBack && !webView.onBackPressed()) {

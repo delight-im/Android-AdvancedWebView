@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="open_in_browser">Mở bằng trình duyệt</string>
-	<string name="reload">Tải lại</string>
+    <string name="open_in_browser">Mở bằng trình duyệt</string>
+    <string name="reload">Tải lại</string>
 	<string name="str_continue">Tiếp tục</string>
 	<string name="str_cancel">Hủy</string>
 	<string name="cert_error_title">Lỗi Chứng chỉ SSL</string>
@@ -11,5 +11,4 @@
 	<string name="ssl_expired">Chứng chỉ đã hết hạn.</string>
 	<string name="ssl_idmismatch">Tên máy chủ chứng chỉ không khớp.</string>
 	<string name="ssl_notyetvalid">Chứng chỉ chưa có hiệu lực.</string>
-    <string name="dont_have_browser">Thiết bị không có trình duyệt</string>
 </resources>
