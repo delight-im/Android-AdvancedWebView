@@ -161,6 +161,16 @@ public class AdvancedWebView extends LollipopFixedWebView {
 		init(context);
 	}
 
+	public AdvancedWebView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+		super(context, attrs, defStyleAttr, defStyleRes);
+		init(context);
+	}
+
+	public AdvancedWebView(Context context, AttributeSet attrs, int defStyleAttr, boolean privateBrowsing) {
+		super(context, attrs, defStyleAttr, privateBrowsing);
+		init(context);
+	}
+
 	public void setListener(final Activity activity, final Listener listener) {
 		setListener(activity, listener, REQUEST_CODE_FILE_PICKER);
 	}
