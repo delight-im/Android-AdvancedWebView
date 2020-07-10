@@ -60,18 +60,18 @@ import static com.pr.swalert.SweetAlertDialog.AlertType.WARNING;
 
 public class WebViewActivity extends AppCompatActivity implements View.OnClickListener, AdvancedWebView.Listener {
 	protected AdvancedWebView webView;
-	private ProgressBar webViewProgressBar, horizontalProgress;
-	private ImageView back, forward, close, menu;
+	protected ProgressBar webViewProgressBar, horizontalProgress;
+	protected ImageView back, forward, close, menu;
 	private View webViewActionBar;
 	protected static String webViewUrl = "http://google.com";
 	public static final String KEY_URL = "url";
 	public static final String KEY_HEADER_DATA = "header";
 	protected TextView tvTitle;
 	protected ConstraintLayout llBottoms;
-	private boolean canGoBack = true;
-	boolean isPdfShowing = false;
+	protected boolean canGoBack = true;
+	protected boolean isPdfShowing = false;
 	private List<HeaderObj> headerObjects;
-	PDFView pdfView;
+	protected PDFView pdfView;
 	private String urlPendingPermission = "";
 
 	public void setCanGoBack(boolean canGoBack) {
@@ -317,7 +317,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		}
 	}
 
-	private void showPdf(Uri attachmentUri) {
+	protected void showPdf(Uri attachmentUri) {
 		pdfView.setVisibility(View.VISIBLE);
 		webView.setVisibility(View.GONE);
 
