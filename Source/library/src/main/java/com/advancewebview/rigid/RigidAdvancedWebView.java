@@ -6,64 +6,13 @@ package com.advancewebview.rigid;
  * Licensed under the MIT License (https://opensource.org/licenses/MIT)
  */
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.DownloadManager;
-import android.app.DownloadManager.Request;
-import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Base64;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.ClientCertRequest;
-import android.webkit.ConsoleMessage;
-import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
-import android.webkit.GeolocationPermissions.Callback;
-import android.webkit.HttpAuthHandler;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.PermissionRequest;
-import android.webkit.SslErrorHandler;
-import android.webkit.URLUtil;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
-import android.webkit.WebStorage.QuotaUpdater;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.advancewebview.AdvancedWebView;
-import com.advancewebview.LollipopFixedWebView;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.regex.Pattern;
 
 /**
  * Advanced WebView component for Android that works as intended out of the box
@@ -81,7 +30,6 @@ public class RigidAdvancedWebView extends AdvancedWebView {
 	private final Throttle mThrottle = new Throttle(getClass().getName(),
 			() -> performSizeChangeDelayed(), new Handler(),
 			MIN_RESIZE_INTERVAL, MAX_RESIZE_INTERVAL);
-	private boolean hasListener = false;
 
 	public RigidAdvancedWebView(Context context) {
 		super(getFixedContext(context));
@@ -114,8 +62,6 @@ public class RigidAdvancedWebView extends AdvancedWebView {
 	}
 
 	public void init() {
-		if (hasListener) return;
-		hasListener = true;
 	}
 
 	@Override

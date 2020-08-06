@@ -12,4 +12,6 @@
 	<string name="ssl_idmismatch">The certificate Hostname mismatch.</string>
 	<string name="ssl_notyetvalid">The certificate is not yet valid.</string>
 	<string name="dont_have_browser">This device don\'t have any browser</string>
+	<string name="wanna_save_image">Do you want to save this image?</string>
+
 </resources>

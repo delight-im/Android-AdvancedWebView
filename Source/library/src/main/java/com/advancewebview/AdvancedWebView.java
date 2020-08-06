@@ -26,6 +26,7 @@ import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ClientCertRequest;
@@ -48,8 +49,11 @@ import android.webkit.WebStorage.QuotaUpdater;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import net.alhazmy13.mediagallery.library.activity.MediaGallery;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -145,6 +149,8 @@ public class AdvancedWebView extends LollipopFixedWebView {
 	protected boolean mGeolocationEnabled;
 	protected String mUploadableFileTypes = "*/*";
 	protected final Map<String, String> mHttpHeaders = new HashMap<String, String>();
+	private boolean hasListener = false;
+	boolean webViewTouching = false;
 
 	public AdvancedWebView(Context context) {
 		super(context);
@@ -476,8 +482,38 @@ public class AdvancedWebView extends LollipopFixedWebView {
 		webSettings.setBuiltInZoomControls(enabled);
 	}
 
+	private boolean handleImageClicked() {
+		final HitTestResult result = getHitTestResult();
+		if (result == null) return true;
+
+		if (result.getType() == HitTestResult.IMAGE_TYPE ||
+				result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+			String image = result.getExtra();
+			if (image == null || TextUtils.isEmpty(image)) return true;
+			ArrayList<String> photos = new ArrayList<>();
+			photos.add(validateImageUrl(image));
+			MediaGallery mediaGallery = MediaGallery.Builder(getContext(), photos)
+					.backgroundColor(R.color.black)
+					.buttonColor(R.color.white)
+					.saveImageTitle(R.string.wanna_save_image)
+					.placeHolder(R.drawable.media_gallery_placeholder)
+					.setBaseUrl("https://www.google.com/")
+					.selectedImagePosition(0);
+			Log.d("handleImageClicked()", " called " + image);
+			mediaGallery.show();
+			return true;
+		}
+		return false;
+	}
+
+	protected String validateImageUrl(String image) {
+		return image;
+	}
+
+
 	@SuppressLint({"SetJavaScriptEnabled"})
 	protected void init(Context context) {
+
 		// in IDE's preview mode
 		if (isInEditMode()) {
 			// do not run the code from this method
@@ -487,7 +523,21 @@ public class AdvancedWebView extends LollipopFixedWebView {
 		if (context instanceof Activity) {
 			mActivity = new WeakReference<Activity>((Activity) context);
 		}
-
+		if (!hasListener) {
+			hasListener = true;
+			setOnTouchListener((view, ev) -> {
+				if (ev.getAction() == MotionEvent.ACTION_MOVE) webViewTouching = false;
+				if (ev.getAction() == MotionEvent.ACTION_DOWN) webViewTouching = true;
+				if (ev.getAction() != MotionEvent.ACTION_UP || !webViewTouching) return false;
+				try {
+					if (handleImageClicked()) return false;
+				} catch (Exception e) {
+//				Crashlytics.logException(e);
+				}
+				performClick();
+				return false;
+			});
+		}
 		mLanguageIso3 = getLanguageIso3();
 
 		setFocusable(true);
@@ -1423,6 +1473,47 @@ public class AdvancedWebView extends LollipopFixedWebView {
 			}
 		}
 
+	}
+
+	public static String validateHtml(String baseUrl, String html) {
+		String documents = html + "";
+		documents = documents.replaceAll("<img src=\"/", "<img src=\"" + baseUrl);
+
+		String regex = "(?<!=\"|=')(\\b[\\w]+:\\/\\/[\\w-?&;#~=\\.\\/\\@]+[\\w\\/])";
+
+		documents = documents.replaceAll(regex, "<a href=\"$1\"><font color=\"#0FADF0\">$1</font></a>");
+		return documents;
+	}
+
+
+	// haveYoutubeContent -> Html.toHtml will remove all <iframe> tag or any tag which not support with textview
+	// (https://commonsware.com/blog/Android/2010/05/26/html-tags-supported-by-textview.html).set this tag to
+	// check if the content contain YoutubePlayer
+	public void setWebViewContent(String content) {
+		content = validateHtml("", content);
+
+		if (getSettings() != null) {
+			getSettings().setDefaultTextEncodingName("utf-8");
+			getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+		}
+
+		if (Build.VERSION.SDK_INT >= 19) {
+			setLayerType(isHardwareAccelerated() ? View.LAYER_TYPE_HARDWARE : View.LAYER_TYPE_NONE, null);
+		} else {
+			setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+		}
+		content = content.replaceAll("<!--.*?-->", "")
+				.replaceAll("/^\\s+|\\s+$/g", "");
+		String htmlPrefix = "<style type=\"text/css\"> @font-face { font-family: MyFont; src: url(\"file:///android_asset/fonts/Montserrat-Regular.ttf\") } body { font-family: MyFont; font-size: 14; text-align: justify;max-width: 100%; word-break: break-all; word-break: break-word}img{display: inline;height: auto;max-width: 100%;}iframe{display: inline;height: auto;max-width: 100%;}</style>" +
+				"<html><body><p align=\"justify\" line-height=\"1.5\" >";
+		String htmlPostfix = "</p></body></html>";
+		String html;
+
+		html = htmlPrefix + content + htmlPostfix;
+		getSettings().setJavaScriptEnabled(true);
+		getSettings().setPluginState(WebSettings.PluginState.ON);
+
+		loadDataWithBaseURL("", html, "text/html; charset=utf-8", "utf-8", "");
 	}
 
 }

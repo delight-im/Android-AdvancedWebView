@@ -12,4 +12,6 @@
 	<string name="ssl_idmismatch">Tên máy chủ chứng chỉ không khớp.</string>
 	<string name="ssl_notyetvalid">Chứng chỉ chưa có hiệu lực.</string>
     <string name="dont_have_browser">Thiết bị không có trình duyệt</string>
+	<string name="wanna_save_image">Bạn có muốn lưu lại ảnh này?</string>
+
 </resources>
