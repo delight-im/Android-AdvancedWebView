@@ -60,6 +60,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        mWebView.setMixedContentAllowed(false);
         mWebView.loadUrl("http://www.example.org/");
 
         // ...
@@ -137,6 +138,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        mWebView.setMixedContentAllowed(false);
         mWebView.loadUrl("http://www.example.org/");
 
         // ...

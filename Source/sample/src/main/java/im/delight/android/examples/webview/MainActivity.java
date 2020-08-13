@@ -25,7 +25,7 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 		mWebView = (AdvancedWebView) findViewById(R.id.webview);
 		mWebView.setListener(this, this);
 		mWebView.setGeolocationEnabled(false);
-		mWebView.setMixedContentAllowed(true);
+		mWebView.setMixedContentAllowed(false);
 		mWebView.setCookiesEnabled(true);
 		mWebView.setThirdPartyCookiesEnabled(true);
 		mWebView.setWebViewClient(new WebViewClient() {
