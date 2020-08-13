@@ -330,9 +330,11 @@ If you want to serve sites or just single resources over plain `http` instead of
    mWebView.setCookiesEnabled(false);
    ```
 
- * Disallow mixed content (HTTP content being loaded inside HTTPS sites)
+ * Allow or disallow (both passive and active) mixed content (HTTP content being loaded inside HTTPS sites)
 
    ```java
+   mWebView.setMixedContentAllowed(true);
+   // or
    mWebView.setMixedContentAllowed(false);
    ```
 
