@@ -456,7 +456,10 @@ public class AdvancedWebView extends WebView {
 		if (Build.VERSION.SDK_INT < 19) {
 			webSettings.setDatabasePath(databaseDir);
 		}
-		setMixedContentAllowed(webSettings, true);
+
+		if (Build.VERSION.SDK_INT >= 21) {
+			webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+		}
 
 		setThirdPartyCookiesEnabled(true);
 
