@@ -3,7 +3,6 @@ package com.advancewebview;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
@@ -23,7 +22,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Browser;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -37,18 +35,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.barteksc.pdfviewer.PDFView;
-import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
-import com.github.barteksc.pdfviewer.listener.OnPageChangeListener;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
+import com.github.florent37.runtimepermission.PermissionResult;
+import com.github.florent37.runtimepermission.RuntimePermission;
 import com.pr.swalert.SweetAlertDialog;
+import com.pr.swalert.toast.ToastUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -72,7 +69,6 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	protected boolean isPdfShowing = false;
 	private List<HeaderObj> headerObjects;
 	protected PDFView pdfView;
-	private String urlPendingPermission = "";
 
 	public void setCanGoBack(boolean canGoBack) {
 		this.canGoBack = canGoBack;
@@ -85,7 +81,6 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 			headerObjects = getIntent().getExtras().getParcelableArrayList(KEY_HEADER_DATA);
 		}
 		if (webViewUrl == null) webViewUrl = "";
-		Log.e("Webview url", webViewUrl);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_advance_webview);
 		initViews();
@@ -274,7 +269,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	long downloadID;
 	String fileName;
 	String mimeType;
-	private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
+	private final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			//Fetching the download id received with the broadcast
@@ -325,53 +320,63 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 				.defaultPage(0)
 				.enableSwipe(true)
 				.swipeHorizontal(false)
-				.onPageChange(new OnPageChangeListener() {
-					@Override
-					public void onPageChanged(int page, int pageCount) {
+				.onPageChange((page, pageCount) -> {
 
-					}
 				})
 				.enableAnnotationRendering(true)
-				.onLoad(new OnLoadCompleteListener() {
-					@Override
-					public void loadComplete(int nbPages) {
-						back.setAlpha(1f);
-						horizontalProgress.setVisibility(View.GONE);
-						isPdfShowing = true;
-					}
+				.onLoad(nbPages -> {
+					back.setAlpha(1f);
+					horizontalProgress.setVisibility(View.GONE);
+					isPdfShowing = true;
 				})
 				.scrollHandle(new DefaultScrollHandle(this))
 				.load();
 	}
 
-	public static final String[] PERMISSIONS_STORAGE = {
-			Manifest.permission.READ_EXTERNAL_STORAGE,
-			Manifest.permission.WRITE_EXTERNAL_STORAGE
-	};
-	public static final int REQUEST_EXTERNAL_STORAGE = 1;
-
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	private boolean verifyStoragePermissions(Activity activity, String url) {
-		if (activity == null) return false;
-		int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-		int permission1 = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
-		if (permission != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED) {
-			urlPendingPermission = url;
-			ActivityCompat.requestPermissions(
-					activity,
-					PERMISSIONS_STORAGE,
-					REQUEST_EXTERNAL_STORAGE
-			);
-			return false;
-		} else return true;
+	@TargetApi(Build.VERSION_CODES.M)
+	public RuntimePermission askPermission(String... permissions) {
+		if (permissions == null || permissions.length == 0) {
+			permissions = new String[2];
+			permissions[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
+			permissions[1] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+		}
+		return RuntimePermission.askPermission(this, permissions)
+				.onDenied(this::onDeniedPermissions)
+				.onForeverDenied(this::onForeverDeniedPermissions);
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (!TextUtils.isEmpty(urlPendingPermission))
-			LoadWebViewUrl(urlPendingPermission);
+	private void onDeniedPermissions(PermissionResult result) {
+		StringBuilder denied = getPermissionsString(result, result.getDenied());
+		ToastUtils.alertYesNo(this, String.format(getString(R.string.ask_perrmission), denied.toString()), yesButtonConfirmed -> {
+			if (yesButtonConfirmed) {
+				result.askAgain();
+			}
+		});
 	}
+
+	private void onForeverDeniedPermissions(PermissionResult result) {
+		StringBuilder denied = getPermissionsString(result, result.getForeverDenied());
+		ToastUtils.alertYesNo(this, String.format(getString(R.string.ask_perrmission), denied.toString()), yesButtonConfirmed -> {
+			if (yesButtonConfirmed) {
+				result.goToSettings();
+			}
+		});
+	}
+
+	private StringBuilder getPermissionsString(PermissionResult result, List<String> foreverDenied) {
+		StringBuilder denied = new StringBuilder();
+		for (String permission : foreverDenied) {
+			try {
+				denied.append("- ").append(getPackageManager().getPermissionInfo(permission, 0).loadLabel(getPackageManager()));
+				if (result.getDenied().indexOf(permission) != result.getDenied().size() - 1)
+					denied.append("\n");
+			} catch (PackageManager.NameNotFoundException e) {
+
+			}
+		}
+		return denied;
+	}
+
 
 	// url = file path or whatever suitable URL you want.
 	public static String getMimeType(String url) {
@@ -387,31 +392,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 	@Override
 	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
 		if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType) || isPdf(mimeType)) {
-			if (!verifyStoragePermissions(this, url)) return;
-//            FileOpen.openFile(this, url,mimeType);
-			File file = new File(Environment.getExternalStoragePublicDirectory(
-					Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
-			if (file.exists() && getMimeType(file.getPath()).equals(mimeType)) {
-				Log.e("File", suggestedFilename);
-				openDownloadedAttachment(this, Uri.fromFile(file), mimeType);
-			} else {
-				DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-				request.setDescription("");
-				request.setTitle(suggestedFilename);
-				request.allowScanningByMediaScanner();
-				request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
-						DownloadManager.Request.NETWORK_MOBILE)
-						.setAllowedOverRoaming(false);
-				request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, suggestedFilename);
-				DownloadManager manager = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
-				if (manager != null) {
-
-					fileName = suggestedFilename;
-					this.mimeType = mimeType;
-					downloadID = manager.enqueue(request);
-				}
-			}
+			askForDownloadFile(suggestedFilename, mimeType, url);
 		} else {
 			pdfView.setVisibility(View.GONE);
 			webView.setVisibility(View.VISIBLE);
@@ -422,13 +403,46 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 			if (isInternetConnected())
 				webView.loadUrl(checkUrl(url), false);
 			else {
-				Toast.makeText(WebViewActivity.this, "Oops!! There is no internet connection. Please enable your internet connection.", Toast.LENGTH_LONG).show();
+				ToastUtils.showToastWarningConfirm(WebViewActivity.this, R.string.no_internet);
 			}
 		}
 
 
 		//Mở file
 //        LoadWebViewUrl(url);
+	}
+
+	private void askForDownloadFile(String suggestedFilename, String mimeType, String finalUrl) {
+		askPermission()
+				.onAccepted(result -> {
+					downloadAndShow(suggestedFilename, mimeType, finalUrl);
+				})
+				.ask();
+	}
+
+	private void downloadAndShow(String suggestedFilename, String mimeType, String finalUrl) {
+		File file = new File(Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_DOWNLOADS) + "/" + suggestedFilename);
+		if (file.exists() && getMimeType(file.getPath()).equals(mimeType)) {
+			openDownloadedAttachment(this, Uri.fromFile(file), mimeType);
+		} else {
+			DownloadManager.Request request = new DownloadManager.Request(Uri.parse(finalUrl));
+			request.setDescription("");
+			request.setTitle(suggestedFilename);
+			request.allowScanningByMediaScanner();
+			request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+					DownloadManager.Request.NETWORK_MOBILE)
+					.setAllowedOverRoaming(false);
+			request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, suggestedFilename);
+			DownloadManager manager = (DownloadManager) getApplicationContext().getSystemService(Context.DOWNLOAD_SERVICE);
+			if (manager != null) {
+
+				fileName = suggestedFilename;
+				this.mimeType = mimeType;
+				downloadID = manager.enqueue(request);
+			}
+		}
 	}
 
 
@@ -517,7 +531,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		if (isInternetConnected())
 			webView.loadUrl(checkUrl(url), false, headers);
 		else {
-			Toast.makeText(WebViewActivity.this, "Oops!! There is no internet connection. Please enable your internet connection.", Toast.LENGTH_LONG).show();
+			ToastUtils.showToastWarningConfirm(WebViewActivity.this,R.string.no_internet);
 		}
 	}
 

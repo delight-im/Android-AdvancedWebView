@@ -13,5 +13,7 @@
 	<string name="ssl_notyetvalid">Chứng chỉ chưa có hiệu lực.</string>
     <string name="dont_have_browser">Thiết bị không có trình duyệt</string>
 	<string name="wanna_save_image">Bạn có muốn lưu lại ảnh này?</string>
+	<string name="ask_perrmission">Ứng dụng cần các quyền sau để hoạt động bình thường:\n%s.\nĐồng ý cấp quyền cho Ứng dụng?</string>
+	<string name="no_internet">Vui lòng kiểm tra kết nối mạng và thử lại</string>
 
 </resources>

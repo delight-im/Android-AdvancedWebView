@@ -13,5 +13,7 @@
 	<string name="ssl_notyetvalid">The certificate is not yet valid.</string>
 	<string name="dont_have_browser">This device don\'t have any browser</string>
 	<string name="wanna_save_image">Do you want to save this image?</string>
+	<string name="ask_perrmission">Application needs following permissions to work normally: %s. Allow application to use those permissions?</string>
+	<string name="no_internet">Oops!! There is no internet connection. Please enable your internet connection.</string>
 
 </resources>
