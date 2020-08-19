@@ -80,6 +80,7 @@ public class AdvancedWebView extends WebView {
 	protected WeakReference<Activity> mActivity;
 	protected WeakReference<Fragment> mFragment;
 	protected Listener mListener;
+	protected boolean mAllowSubdomains = true;
 	protected final List<String> mPermittedHostnames = new LinkedList<String>();
 	/** File upload callback for platform versions prior to Android 5.0 */
 	protected ValueCallback<Uri> mFileUploadCallbackFirst;
@@ -340,6 +341,14 @@ public class AdvancedWebView extends WebView {
 	public void removeHttpHeader(final String name) {
 		mHttpHeaders.remove(name);
 	}
+	
+	public void setAllowSubdomains(boolean b){
+		mAllowSubdomains = b;
+	}
+	
+	public boolean getAllowSubdomains(){
+		return mAllowSubdomains;
+	}
 
 	public void addPermittedHostname(String hostname) {
 		mPermittedHostnames.add(hostname);
@@ -506,7 +515,7 @@ public class AdvancedWebView extends WebView {
 
 			@Override
 			public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-				if (!isPermittedUrl(url)) {
+				if (!isPermittedUrl(url, mAllowSubdomains)) {
 					// if a listener is available
 					if (mListener != null) {
 						// inform the listener about the request
@@ -1109,8 +1118,12 @@ public class AdvancedWebView extends WebView {
 
 		return unique.toString();
 	}
-
+	
 	public boolean isPermittedUrl(final String url) {
+		isPermittedUrl(url, true)
+	}
+
+	public boolean isPermittedUrl(final String url, boolean allowSubdomains) {
 		// if the permitted hostnames have not been restricted to a specific set
 		if (mPermittedHostnames.size() == 0) {
 			// all hostnames are allowed
@@ -1145,7 +1158,7 @@ public class AdvancedWebView extends WebView {
 		// for every hostname in the set of permitted hosts
 		for (String expectedHost : mPermittedHostnames) {
 			// if the two hostnames match or if the actual host is a subdomain of the expected host
-			if (actualHost.equals(expectedHost) || actualHost.endsWith("." + expectedHost)) {
+			if (actualHost.equals(expectedHost) || (allowSubdomains && actualHost.endsWith("." + expectedHost))) {
 				// the actual hostname of the URL to be checked is allowed
 				return true;
 			}
