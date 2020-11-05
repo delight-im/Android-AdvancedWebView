@@ -76,8 +76,10 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		String webViewTitle = "";
 		if (getIntent().getExtras() != null) {
 			webViewUrl = getIntent().getExtras().getString(KEY_URL);
+			webViewTitle = getIntent().getExtras().getString("title");
 			headerObjects = getIntent().getExtras().getParcelableArrayList(KEY_HEADER_DATA);
 		}
 		if (webViewUrl == null) webViewUrl = "";
@@ -89,6 +91,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		setUpWebView();
 		setListeners();
 		registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+		tvTitle.setText(webViewTitle);
 	}
 
 	protected void setActionBarColor(@ColorRes int color) {

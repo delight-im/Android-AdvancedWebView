@@ -513,7 +513,6 @@ public class AdvancedWebView extends LollipopFixedWebView {
 
 	@SuppressLint({"SetJavaScriptEnabled"})
 	protected void init(Context context) {
-
 		// in IDE's preview mode
 		if (isInEditMode()) {
 			// do not run the code from this method
@@ -1079,9 +1078,16 @@ public class AdvancedWebView extends LollipopFixedWebView {
 			public void onDownloadStart(final String url, final String userAgent, final String contentDisposition, final String mimeType, final long contentLength) {
 
 				final String suggestedFilename = URLUtil.guessFileName(url, contentDisposition, mimeType);
-
 				if (mListener != null) {
 					mListener.onDownloadRequested(url, suggestedFilename, mimeType, contentLength, contentDisposition, userAgent);
+				} else {
+					if (getContext() != null) {
+						Intent intent = new Intent(getContext(), WebViewActivity.class);
+						intent.putExtra("url", url);
+						intent.putExtra("title", suggestedFilename);
+						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						getContext().startActivity(intent);
+					}
 				}
 			}
 
