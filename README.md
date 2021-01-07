@@ -23,7 +23,7 @@ Enhanced WebView component for Android that works as intended out of the box
 
      ```gradle
      dependencies {
-         compile 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
+         implementation 'com.github.delight-im:Android-AdvancedWebView:v3.2.1'
      }
      ```
 
@@ -60,6 +60,7 @@ public class MyActivity extends Activity implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        mWebView.setMixedContentAllowed(false);
         mWebView.loadUrl("http://www.example.org/");
 
         // ...
@@ -137,6 +138,7 @@ public class MyFragment extends Fragment implements AdvancedWebView.Listener {
 
         mWebView = (AdvancedWebView) rootView.findViewById(R.id.webview);
         mWebView.setListener(this, this);
+        mWebView.setMixedContentAllowed(false);
         mWebView.loadUrl("http://www.example.org/");
 
         // ...
@@ -330,9 +332,11 @@ If you want to serve sites or just single resources over plain `http` instead of
    mWebView.setCookiesEnabled(false);
    ```
 
- * Disallow mixed content (HTTP content being loaded inside HTTPS sites)
+ * Allow or disallow (both passive and active) mixed content (HTTP content being loaded inside HTTPS sites)
 
    ```java
+   mWebView.setMixedContentAllowed(true);
+   // or
    mWebView.setMixedContentAllowed(false);
    ```
 
