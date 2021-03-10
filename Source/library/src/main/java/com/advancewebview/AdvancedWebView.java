@@ -96,6 +96,19 @@ public class AdvancedWebView extends LollipopFixedWebView {
 
 	}
 
+	public static boolean isPowerpoint(String mimeType) {
+		String pptMime = "application/vnd.ms-powerpoint";
+		String pptxMime = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+		String potxMime = "application/vnd.openxmlformats-officedocument.presentationml.template";
+		String ppsxMime = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+
+		return mimeType.equals(pptMime)
+				|| mimeType.equals(pptxMime)
+				|| mimeType.equals(potxMime)
+				|| mimeType.equals(ppsxMime);
+
+	}
+
 	public static boolean isPdf(String mimeType) {
 		String pdf = "application/pdf";
 		return mimeType.equals(pdf);

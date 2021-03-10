@@ -394,7 +394,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 
 	@Override
 	public void onDownloadRequested(String url, String suggestedFilename, String mimeType, long contentLength, String contentDisposition, String userAgent) {
-		if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType) || isPdf(mimeType)) {
+		if (AdvancedWebView.isSpreadSheets(mimeType) || AdvancedWebView.isDocs(mimeType) || isPdf(mimeType) || AdvancedWebView.isPowerpoint(mimeType)) {
 			askForDownloadFile(suggestedFilename, mimeType, url);
 		} else {
 			pdfView.setVisibility(View.GONE);
