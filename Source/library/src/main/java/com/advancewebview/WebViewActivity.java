@@ -218,21 +218,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 			public boolean onMenuItemClick(MenuItem item) {
 				if (item.getItemId() == R.id.open_in_browser) {
-					if (webView.getUrl() != null) {
-						try {
-							Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl()));
-							if (headerObjects != null) {
-								Bundle bundle = new Bundle();
-								for (HeaderObj headerObj : headerObjects) {
-									bundle.putString(headerObj.getHeaderName(), headerObj.getHeaderData());
-								}
-								browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
-							}
-							startActivity(browserIntent);
-						} catch (ActivityNotFoundException e) {
-							Toast.makeText(WebViewActivity.this, R.string.dont_have_browser, Toast.LENGTH_SHORT).show();
-						}
-					}
+					openInBrowser();
 				} else if (item.getItemId() == R.id.reload) {
 					webView.reload();
 				}
@@ -242,8 +228,31 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		popup.show();
 	}
 
+	protected void openInBrowser() {
+		if (webView.getUrl() != null) {
+			try {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webView.getUrl()));
+				if (headerObjects != null) {
+					Bundle bundle = new Bundle();
+					for (HeaderObj headerObj : headerObjects) {
+						bundle.putString(headerObj.getHeaderName(), headerObj.getHeaderData());
+					}
+					browserIntent.putExtra(Browser.EXTRA_HEADERS, bundle);
+				}
+				startActivity(browserIntent);
+			} catch (ActivityNotFoundException e) {
+				Toast.makeText(WebViewActivity.this, R.string.dont_have_browser, Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
 	@Override
 	public void onPageStarted(String url, Bitmap favicon) {
+		if (url.contains("https://drive.google.com/file/")) {
+			onBackPressed();
+			openInBrowser();
+			return;
+		}
 //        if (!webViewProgressBar.isShown())
 //            webViewProgressBar.setVisibility(View.VISIBLE);
 		if (!horizontalProgress.isShown())
@@ -534,7 +543,7 @@ public class WebViewActivity extends AppCompatActivity implements View.OnClickLi
 		if (isInternetConnected())
 			webView.loadUrl(checkUrl(url), false, headers);
 		else {
-			ToastUtils.showToastWarningConfirm(WebViewActivity.this,R.string.no_internet);
+			ToastUtils.showToastWarningConfirm(WebViewActivity.this, R.string.no_internet);
 		}
 	}
 
