@@ -29,7 +29,7 @@ dependencies {
 	api 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
 	implementation 'com.github.trantuananh1996:sweetAlert:1.0.2'
 	implementation 'com.github.trantuananh1996:MediaGallery:1.1.4'
-	implementation 'com.github.florent37:runtime-permission:1.1.1'
+	implementation 'com.github.trantuananh1996.RuntimePermission:runtime-permission:1.1.4'
 
 }
 repositories {
